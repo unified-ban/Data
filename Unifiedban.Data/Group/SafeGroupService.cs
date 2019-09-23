@@ -51,7 +51,7 @@ namespace Unifiedban.Data.Group
             using (UBContext ubc = new UBContext())
             {
                 SafeGroup exists = ubc.Group_SafeGroups
-                    .Where(x => x.TelegramChatId == safeGroup.TelegramChatId)
+                    .Where(x => x.GroupId == safeGroup.GroupId)
                     .FirstOrDefault();
                 if (exists == null)
                     return SystemLog.ErrorCodes.Error;

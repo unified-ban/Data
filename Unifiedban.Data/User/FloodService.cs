@@ -51,7 +51,7 @@ namespace Unifiedban.Data.User
             using (UBContext ubc = new UBContext())
             {
                 Flood exists = ubc.Users_Flood
-                    .Where(x => x.TelegramChatId == flood.TelegramChatId
+                    .Where(x => x.GroupId == flood.GroupId
                         && x.TelegramUserId == flood.TelegramUserId)
                     .FirstOrDefault();
                 if (exists == null)
@@ -95,7 +95,7 @@ namespace Unifiedban.Data.User
             using (UBContext ubc = new UBContext())
             {
                 Flood exists = ubc.Users_Flood
-                    .Where(x => x.TelegramChatId == flood.TelegramChatId
+                    .Where(x => x.GroupId == flood.GroupId
                         && x.TelegramUserId == flood.TelegramUserId)
                     .FirstOrDefault();
                 if (exists == null)

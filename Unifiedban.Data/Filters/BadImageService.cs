@@ -58,7 +58,7 @@ namespace Unifiedban.Data.Filters
 
                 try
                 {
-                    exists.TelegramChatId = badImage.TelegramChatId;
+                    exists.GroupId = badImage.GroupId;
                     exists.HashData = badImage.HashData;
                     exists.ParentImageId = badImage.ParentImageId;
                     exists.FlipType = badImage.FlipType;

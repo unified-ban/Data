@@ -51,7 +51,7 @@ namespace Unifiedban.Data.User
             using (UBContext ubc = new UBContext())
             {
                 TempKicked exists = ubc.Users_TempKicked
-                    .Where(x => x.TelegramChatId == tempKicked.TelegramChatId
+                    .Where(x => x.GroupId == tempKicked.GroupId
                         && x.TelegramUserId == tempKicked.TelegramUserId)
                     .FirstOrDefault();
                 if (exists == null)

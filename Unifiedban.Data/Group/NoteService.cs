@@ -58,7 +58,7 @@ namespace Unifiedban.Data.Group
 
                 try
                 {
-                    exists.TelegramChatId = note.TelegramChatId;
+                    exists.GroupId = note.GroupId;
                     exists.Message = note.Message;
                     exists.Tag = note.Tag;
 

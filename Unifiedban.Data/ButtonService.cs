@@ -60,7 +60,7 @@ namespace Unifiedban.Data
                     exists.Name = button.Name;
                     exists.Content = button.Content;
                     exists.Scope = button.Scope;
-                    exists.TelegramChatId = button.TelegramChatId;
+                    exists.GroupId = button.GroupId;
 
                     ubc.SaveChanges();
                     return button;

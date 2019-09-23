@@ -46,7 +46,6 @@ namespace Unifiedban.Data.User
                 return null;
             }
         }
-
         public SystemLog.ErrorCodes Remove(Banned banned, int callerId)
         {
             using (UBContext ubc = new UBContext())

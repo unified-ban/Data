@@ -58,6 +58,7 @@ namespace Unifiedban.Data.Group
 
                 try
                 {
+                    exists.GroupId = dashboardPermission.GroupId;
                     exists.State = dashboardPermission.State;
                     exists.LastUpdateUtc = dashboardPermission.LastUpdateUtc;
 

@@ -59,7 +59,7 @@ namespace Unifiedban.Data.Filters
                 try
                 {
                     exists.Name = badWord.Name;
-                    exists.TelegramChatId = badWord.TelegramChatId;
+                    exists.GroupId = badWord.GroupId;
                     exists.Regex = badWord.Regex;
                     exists.Status = badWord.Status;
                     exists.Match = badWord.Match;
