@@ -9,17 +9,17 @@ using Unifiedban.Models.Filters;
 
 namespace Unifiedban.Data.Filters
 {
-    public class ImageService
+    public class BadImageService
     {
-        public Image Add(Image image, int callerId)
+        public BadImage Add(BadImage badImage, int callerId)
         {
             using (UBContext ubc = new UBContext())
             {
                 try
                 {
-                    ubc.Add(image);
+                    ubc.Add(badImage);
                     ubc.SaveChanges();
-                    return image;
+                    return badImage;
                 }
                 catch (Exception ex)
                 {
@@ -27,7 +27,7 @@ namespace Unifiedban.Data.Filters
                     {
                         LoggerName = "Unifiedban",
                         Date = DateTime.Now,
-                        Function = "Unifiedban.Data.ImageService.Add",
+                        Function = "Unifiedban.Data.BadImageService.Add",
                         Level = SystemLog.Levels.Warn,
                         Message = ex.Message,
                         UserId = callerId
@@ -37,7 +37,7 @@ namespace Unifiedban.Data.Filters
                         {
                             LoggerName = "Unifiedban.Data",
                             Date = DateTime.Now,
-                            Function = "Unifiedban.Data.ImageService.Add",
+                            Function = "Unifiedban.Data.BadImageService.Add",
                             Level = SystemLog.Levels.Warn,
                             Message = ex.InnerException.Message,
                             UserId = callerId
@@ -46,27 +46,27 @@ namespace Unifiedban.Data.Filters
                 return null;
             }
         }
-        public Image Update(Image image, int callerId)
+        public BadImage Update(BadImage badImage, int callerId)
         {
             using (UBContext ubc = new UBContext())
             {
-                Image exists = ubc.Images
-                    .Where(x => x.ImageId == image.ImageId)
+                BadImage exists = ubc.BadImages
+                    .Where(x => x.BadImageId == badImage.BadImageId)
                     .FirstOrDefault();
                 if (exists == null)
                     return null;
 
                 try
                 {
-                    exists.TelegramChatId = image.TelegramChatId;
-                    exists.HashData = image.HashData;
-                    exists.ParentImageId = image.ParentImageId;
-                    exists.FlipType = image.FlipType;
-                    exists.Status = image.Status;
-                    exists.Match = image.Match;
+                    exists.TelegramChatId = badImage.TelegramChatId;
+                    exists.HashData = badImage.HashData;
+                    exists.ParentImageId = badImage.ParentImageId;
+                    exists.FlipType = badImage.FlipType;
+                    exists.Status = badImage.Status;
+                    exists.Match = badImage.Match;
 
                     ubc.SaveChanges();
-                    return image;
+                    return badImage;
                 }
                 catch (Exception ex)
                 {
@@ -74,7 +74,7 @@ namespace Unifiedban.Data.Filters
                     {
                         LoggerName = "Unifiedban",
                         Date = DateTime.Now,
-                        Function = "Unifiedban.Data.ImageService.Update",
+                        Function = "Unifiedban.Data.BadImageService.Update",
                         Level = SystemLog.Levels.Warn,
                         Message = ex.Message,
                         UserId = callerId
@@ -84,7 +84,7 @@ namespace Unifiedban.Data.Filters
                         {
                             LoggerName = "Unifiedban.Data",
                             Date = DateTime.Now,
-                            Function = "Unifiedban.Data.ImageService.Update",
+                            Function = "Unifiedban.Data.BadImageService.Update",
                             Level = SystemLog.Levels.Warn,
                             Message = ex.InnerException.Message,
                             UserId = callerId
@@ -93,12 +93,12 @@ namespace Unifiedban.Data.Filters
                 return null;
             }
         }
-        public SystemLog.ErrorCodes Remove(Image image, int callerId)
+        public SystemLog.ErrorCodes Remove(BadImage badImage, int callerId)
         {
             using (UBContext ubc = new UBContext())
             {
-                Image exists = ubc.Images
-                    .Where(x => x.ImageId == image.ImageId)
+                BadImage exists = ubc.BadImages
+                    .Where(x => x.BadImageId == badImage.BadImageId)
                     .FirstOrDefault();
                 if (exists == null)
                     return SystemLog.ErrorCodes.Error;
@@ -114,7 +114,7 @@ namespace Unifiedban.Data.Filters
                     {
                         LoggerName = "Unifiedban",
                         Date = DateTime.Now,
-                        Function = "Unifiedban.Data.ImageService.Remove",
+                        Function = "Unifiedban.Data.BadImageService.Remove",
                         Level = SystemLog.Levels.Warn,
                         Message = ex.Message,
                         UserId = callerId
@@ -124,7 +124,7 @@ namespace Unifiedban.Data.Filters
                         {
                             LoggerName = "Unifiedban.Data",
                             Date = DateTime.Now,
-                            Function = "Unifiedban.Data.ImageService.Remove",
+                            Function = "Unifiedban.Data.BadImageService.Remove",
                             Level = SystemLog.Levels.Warn,
                             Message = ex.InnerException.Message,
                             UserId = callerId
@@ -133,16 +133,16 @@ namespace Unifiedban.Data.Filters
                 return SystemLog.ErrorCodes.Error;
             }
         }
-        public List<Image> Get(Expression<Func<Image, bool>> whereClause)
+        public List<BadImage> Get(Expression<Func<BadImage, bool>> whereClause)
         {
             using (UBContext ubc = new UBContext())
             {
                 if (whereClause == null)
-                    return ubc.Images
+                    return ubc.BadImages
                         .AsNoTracking()
                         .ToList();
 
-                return ubc.Images
+                return ubc.BadImages
                     .AsNoTracking()
                     .Where(whereClause)
                     .ToList();

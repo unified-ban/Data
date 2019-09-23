@@ -48,7 +48,7 @@ namespace Unifiedban.Data
 
         #region " Filters "
         public DbSet<BadWord> BadWords { get; set; }
-        public DbSet<Image> Images { get; set; }
+        public DbSet<BadImage> BadImages { get; set; }
         #endregion
 
         #endregion
