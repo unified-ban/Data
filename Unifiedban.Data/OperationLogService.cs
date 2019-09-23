@@ -51,11 +51,11 @@ namespace Unifiedban.Data
             using (UBContext ubc = new UBContext())
             {
                 if (whereClause == null)
-                    return ubc.ActionLogs
+                    return ubc.OperationLogs
                         .AsNoTracking()
                         .ToList();
 
-                return ubc.ActionLogs
+                return ubc.OperationLogs
                     .AsNoTracking()
                     .Where(whereClause)
                     .ToList();
