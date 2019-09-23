@@ -62,6 +62,76 @@ namespace Unifiedban.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Operator>()
+                .HasIndex(x => x.TelegramUserId);
+
+            modelBuilder.Entity<Button>()
+                .HasIndex(x => new { x.GroupId, x.Name });
+            modelBuilder.Entity<Button>()
+                .HasIndex(x => x.GroupId);
+            modelBuilder.Entity<Button>()
+                .HasIndex(x => x.Name);
+
+            OnModelCreating_User(modelBuilder);
+            OnModelCreating_Group(modelBuilder);
+            OnModelCreating_Filters(modelBuilder);
         }
+
+        private void OnModelCreating_User(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<TempKicked>()
+                .HasKey(x => new { x.TelegramUserId, x.GroupId });
+
+            modelBuilder.Entity<Flood>()
+                .HasKey(x => new { x.TelegramUserId, x.GroupId });
+
+            modelBuilder.Entity<Banned>()
+                .HasKey(x => new { x.TelegramUserId, x.GroupId });
+            modelBuilder.Entity<Banned>()
+                .HasIndex(x => x.GroupId);
+            modelBuilder.Entity<Banned>()
+                .HasIndex(x => x.TelegramUserId);
+        }
+
+        private void OnModelCreating_Group(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<TelegramGroup>()
+                .HasIndex(x => x.TelegramChatId);
+
+            modelBuilder.Entity<DashboardUser>()
+                .HasIndex(x => x.TelegramUserId);
+
+            modelBuilder.Entity<DashboardPermission>()
+                .HasIndex(x => new { x.GroupId, x.DashboardUserId });
+            modelBuilder.Entity<DashboardPermission>()
+                .HasIndex(x => x.GroupId);
+            modelBuilder.Entity<DashboardPermission>()
+                .HasIndex(x => x.DashboardUserId);
+
+            modelBuilder.Entity<SafeGroup>()
+                .HasKey(x => new { x.GroupId, x.GroupName });
+
+            modelBuilder.Entity<NightSchedule>()
+                .HasIndex(x => x.GroupId);
+
+            modelBuilder.Entity<Note>()
+                .HasIndex(x => new { x.GroupId, x.Tag });
+            modelBuilder.Entity<Note>()
+                .HasIndex(x => x.GroupId);
+            modelBuilder.Entity<Note>()
+                .HasIndex(x => x.Tag);
+        }
+
+        private void OnModelCreating_Filters(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<BadWord>()
+                .HasIndex(x => x.GroupId);
+            modelBuilder.Entity<BadWord>()
+                .HasIndex(x => x.Name);
+            modelBuilder.Entity<BadImage>()
+                .HasIndex(x => x.GroupId);
+        }
+
     }
 }
