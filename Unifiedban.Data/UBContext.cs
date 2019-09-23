@@ -42,8 +42,8 @@ namespace Unifiedban.Data
         public DbSet<DashboardUser> Group_DashboardUsers { get; set; }
         public DbSet<DashboardPermission> Group_DashboardPermissions { get; set; }
         public DbSet<Note> Group_Notes { get; set; }
-        public DbSet<SafeGroup> Group_SafeGroups{ get; set; }
-        public DbSet<NightSchedule> Group_NightSchedule { get; set; }
+        public DbSet<SafeGroup> Group_SafeGroups { get; set; }
+        public DbSet<NightSchedule> Group_NightSchedules { get; set; }
         #endregion
 
         #region " Filters "
