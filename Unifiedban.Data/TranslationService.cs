@@ -369,11 +369,13 @@ namespace Unifiedban.Data
                 if (whereClause == null)
                     return ubc.TranslationEntries
                         .AsNoTracking()
+                        .Include(x => x.Language)
                         .ToList();
 
                 return ubc.TranslationEntries
                     .AsNoTracking()
                     .Where(whereClause)
+                    .Include(x => x.Language)
                     .ToList();
 
             }
