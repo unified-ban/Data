@@ -27,6 +27,9 @@ namespace Unifiedban.Data
         #endregion
 
         #region " dbo "
+        #region " Config "
+        public DbSet<SysConfig> SysConfigs { get; set; }
+        #endregion
         public DbSet<ActionType> ActionTypes { get; set; }
         public DbSet<Button> Buttons { get; set; }
         public DbSet<Operator> Operators { get; set; }
