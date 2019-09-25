@@ -9,8 +9,17 @@
     <RepositoryUrl>https://todo/</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
     <AssemblyVersion>1.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.8</FileVersion>
+    <FileVersion>1.0.0.22</FileVersion>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20190925045912_Unifiedban-MakeTelegramChatIdLong.cs" />
+    <Compile Remove="Migrations\20190925045912_Unifiedban-MakeTelegramChatIdLong.Designer.cs" />
+    <Compile Remove="Migrations\20190925050228_Unifiedban-MakeTelegramChatIdLong.cs" />
+    <Compile Remove="Migrations\20190925050228_Unifiedban-MakeTelegramChatIdLong.Designer.cs" />
+    <Compile Remove="Migrations\20190925050327_Unifiedban-RemoveIndexFromTelegramGroupChatId.cs" />
+    <Compile Remove="Migrations\20190925050327_Unifiedban-RemoveIndexFromTelegramGroupChatId.Designer.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="log4net" Version="2.0.8" />

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Unifiedban.Data;
 
 namespace Unifiedban.Data.Migrations
 {
     [DbContext(typeof(UBContext))]
-    partial class UBContextModelSnapshot : ModelSnapshot
+    [Migration("20190925050354_Unifiedban-MakeTelegramChatIdLong")]
+    partial class UnifiedbanMakeTelegramChatIdLong
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -253,8 +255,6 @@ namespace Unifiedban.Data.Migrations
                     b.Property<string>("WelcomeText");
 
                     b.HasKey("GroupId");
-
-                    b.HasIndex("TelegramChatId");
 
                     b.ToTable("Group_TelegramGroup","dbo");
                 });
