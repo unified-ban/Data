@@ -9,7 +9,7 @@
     <RepositoryUrl>https://todo/</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
     <AssemblyVersion>1.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.24</FileVersion>
+    <FileVersion>1.0.0.29</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
