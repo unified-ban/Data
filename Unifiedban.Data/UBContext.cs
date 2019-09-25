@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Unifiedban.Models;
+using Unifiedban.Models.Translation;
 using Unifiedban.Models.User;
 using Unifiedban.Models.Group;
 using Unifiedban.Models.Filters;
@@ -27,12 +28,20 @@ namespace Unifiedban.Data
         #endregion
 
         #region " dbo "
+
         #region " Config "
         public DbSet<SysConfig> SysConfigs { get; set; }
         #endregion
+
         public DbSet<ActionType> ActionTypes { get; set; }
         public DbSet<Button> Buttons { get; set; }
         public DbSet<Operator> Operators { get; set; }
+
+        #region " Translation / Lang "
+        public DbSet<Language> Languages { get; set; }
+        public DbSet<Key> TranslationKeys { get; set; }
+        public DbSet<Entry> TranslationEntries { get; set; }
+        #endregion
 
         #region " User "
         public DbSet<Banned> Users_Banned { get; set; }
@@ -65,6 +74,30 @@ namespace Unifiedban.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Entry>()
+                .HasKey(c => new { c.LanguageId, c.KeyId });
+
+            modelBuilder.Entity<Language>()
+                .HasData(
+                new Language()
+                {
+                    LanguageId = "en",
+                    Name = "English",
+                    Status = Language.State.NotRready,
+                    UniversalCode = "en-GB"
+                }
+            );
+            modelBuilder.Entity<Language>()
+                .HasData(
+                new Language()
+                {
+                    LanguageId = "it",
+                    Name = "Italiano",
+                    Status = Language.State.NotRready,
+                    UniversalCode = "it-IT"
+                }
+            );
 
             modelBuilder.Entity<Operator>()
                 .HasIndex(x => x.TelegramUserId);
