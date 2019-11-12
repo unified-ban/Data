@@ -27,12 +27,12 @@ namespace Unifiedban.Data
         public DbSet<ActionLog> ActionLogs { get; set; }
         #endregion
 
-        #region " dbo "
-
         #region " Config "
         public DbSet<SysConfig> SysConfigs { get; set; }
+        public DbSet<ConfigurationParameter> Group_ConfigurationParameters { get; set; }
         #endregion
 
+        #region " dbo "
         public DbSet<ActionType> ActionTypes { get; set; }
         public DbSet<Button> Buttons { get; set; }
         public DbSet<Operator> Operators { get; set; }
