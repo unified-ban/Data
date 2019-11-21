@@ -129,18 +129,25 @@ namespace Unifiedban.Data
         }
         public List<SysConfig> Get(Expression<Func<SysConfig, bool>> whereClause)
         {
-            using (UBContext ubc = new UBContext())
+            try
             {
-                if (whereClause == null)
+                using (UBContext ubc = new UBContext())
+                {
+                    if (whereClause == null)
+                        return ubc.SysConfigs
+                            .AsNoTracking()
+                            .ToList();
+
                     return ubc.SysConfigs
                         .AsNoTracking()
+                        .Where(whereClause)
                         .ToList();
 
-                return ubc.SysConfigs
-                    .AsNoTracking()
-                    .Where(whereClause)
-                    .ToList();
-
+                }
+            }
+            catch
+            {
+                return new List<SysConfig>();
             }
         }
     }

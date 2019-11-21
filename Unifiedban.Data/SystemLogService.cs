@@ -48,18 +48,25 @@ namespace Unifiedban.Data
 
         public List<SystemLog> Get(Expression<Func<SystemLog, bool>> whereClause)
         {
-            using (UBContext ubc = new UBContext())
+            try
             {
-                if (whereClause == null)
+                using (UBContext ubc = new UBContext())
+                {
+                    if (whereClause == null)
+                        return ubc.SystemLogs
+                            .AsNoTracking()
+                            .ToList();
+
                     return ubc.SystemLogs
                         .AsNoTracking()
+                        .Where(whereClause)
                         .ToList();
 
-                return ubc.SystemLogs
-                    .AsNoTracking()
-                    .Where(whereClause)
-                    .ToList();
-
+                }
+            }
+            catch
+            {
+                return new List<SystemLog>();
             }
         }
     }

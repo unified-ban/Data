@@ -88,18 +88,25 @@ namespace Unifiedban.Data.User
         }
         public List<Banned> Get(Expression<Func<Banned, bool>> whereClause)
         {
-            using (UBContext ubc = new UBContext())
+            try
             {
-                if (whereClause == null)
+                using (UBContext ubc = new UBContext())
+                {
+                    if (whereClause == null)
+                        return ubc.Users_Banned
+                            .AsNoTracking()
+                            .ToList();
+
                     return ubc.Users_Banned
                         .AsNoTracking()
+                        .Where(whereClause)
                         .ToList();
 
-                return ubc.Users_Banned
-                    .AsNoTracking()
-                    .Where(whereClause)
-                    .ToList();
-
+                }
+            }
+            catch
+            {
+                return new List<Banned>();
             }
         }
     }

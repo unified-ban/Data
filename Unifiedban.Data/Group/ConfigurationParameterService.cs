@@ -132,18 +132,25 @@ namespace Unifiedban.Data.Group
         }
         public List<ConfigurationParameter> Get(Expression<Func<ConfigurationParameter, bool>> whereClause)
         {
-            using (UBContext ubc = new UBContext())
+            try
             {
-                if (whereClause == null)
+                using (UBContext ubc = new UBContext())
+                {
+                    if (whereClause == null)
+                        return ubc.Group_ConfigurationParameters
+                            .AsNoTracking()
+                            .ToList();
+
                     return ubc.Group_ConfigurationParameters
                         .AsNoTracking()
+                        .Where(whereClause)
                         .ToList();
 
-                return ubc.Group_ConfigurationParameters
-                    .AsNoTracking()
-                    .Where(whereClause)
-                    .ToList();
-
+                }
+            }
+            catch
+            {
+                return new List<ConfigurationParameter>();
             }
         }
     }

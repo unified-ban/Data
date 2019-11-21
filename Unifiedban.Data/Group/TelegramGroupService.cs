@@ -138,18 +138,25 @@ namespace Unifiedban.Data.Group
         }
         public List<TelegramGroup> Get(Expression<Func<TelegramGroup, bool>> whereClause)
         {
-            using (UBContext ubc = new UBContext())
+            try
             {
-                if (whereClause == null)
+                using (UBContext ubc = new UBContext())
+                {
+                    if (whereClause == null)
+                        return ubc.Group_TelegramGroups
+                            .AsNoTracking()
+                            .ToList();
+
                     return ubc.Group_TelegramGroups
                         .AsNoTracking()
+                        .Where(whereClause)
                         .ToList();
 
-                return ubc.Group_TelegramGroups
-                    .AsNoTracking()
-                    .Where(whereClause)
-                    .ToList();
-
+                }
+            }
+            catch
+            {
+                return new List<TelegramGroup>();
             }
         }
     }

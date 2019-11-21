@@ -134,18 +134,25 @@ namespace Unifiedban.Data.Filters
         }
         public List<BadWord> Get(Expression<Func<BadWord, bool>> whereClause)
         {
-            using (UBContext ubc = new UBContext())
+            try
             {
-                if (whereClause == null)
+                using (UBContext ubc = new UBContext())
+                {
+                    if (whereClause == null)
+                        return ubc.BadWords
+                            .AsNoTracking()
+                            .ToList();
+
                     return ubc.BadWords
                         .AsNoTracking()
+                        .Where(whereClause)
                         .ToList();
 
-                return ubc.BadWords
-                    .AsNoTracking()
-                    .Where(whereClause)
-                    .ToList();
-
+                }
+            }
+            catch
+            {
+                return new List<BadWord>();
             }
         }
     }

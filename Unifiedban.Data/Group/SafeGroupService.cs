@@ -88,18 +88,25 @@ namespace Unifiedban.Data.Group
         }
         public List<SafeGroup> Get(Expression<Func<SafeGroup, bool>> whereClause)
         {
-            using (UBContext ubc = new UBContext())
+            try
             {
-                if (whereClause == null)
+                using (UBContext ubc = new UBContext())
+                {
+                    if (whereClause == null)
+                        return ubc.Group_SafeGroups
+                            .AsNoTracking()
+                            .ToList();
+
                     return ubc.Group_SafeGroups
                         .AsNoTracking()
+                        .Where(whereClause)
                         .ToList();
 
-                return ubc.Group_SafeGroups
-                    .AsNoTracking()
-                    .Where(whereClause)
-                    .ToList();
-
+                }
+            }
+            catch
+            {
+                return new List<SafeGroup>();
             }
         }
     }

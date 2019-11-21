@@ -132,18 +132,25 @@ namespace Unifiedban.Data.Group
         }
         public List<Note> Get(Expression<Func<Note, bool>> whereClause)
         {
-            using (UBContext ubc = new UBContext())
+            try
             {
-                if (whereClause == null)
+                using (UBContext ubc = new UBContext())
+                {
+                    if (whereClause == null)
+                        return ubc.Group_Notes
+                            .AsNoTracking()
+                            .ToList();
+
                     return ubc.Group_Notes
                         .AsNoTracking()
+                        .Where(whereClause)
                         .ToList();
 
-                return ubc.Group_Notes
-                    .AsNoTracking()
-                    .Where(whereClause)
-                    .ToList();
-
+                }
+            }
+            catch
+            {
+                return new List<Note>();
             }
         }
     }

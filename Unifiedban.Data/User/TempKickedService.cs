@@ -89,18 +89,25 @@ namespace Unifiedban.Data.User
         }
         public List<TempKicked> Get(Expression<Func<TempKicked, bool>> whereClause)
         {
-            using (UBContext ubc = new UBContext())
+            try
             {
-                if (whereClause == null)
+                using (UBContext ubc = new UBContext())
+                {
+                    if (whereClause == null)
+                        return ubc.Users_TempKicked
+                            .AsNoTracking()
+                            .ToList();
+
                     return ubc.Users_TempKicked
                         .AsNoTracking()
+                        .Where(whereClause)
                         .ToList();
 
-                return ubc.Users_TempKicked
-                    .AsNoTracking()
-                    .Where(whereClause)
-                    .ToList();
-
+                }
+            }
+            catch
+            {
+                return new List<TempKicked>();
             }
         }
     }

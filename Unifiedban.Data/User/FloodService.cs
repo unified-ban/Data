@@ -133,18 +133,25 @@ namespace Unifiedban.Data.User
         }
         public List<Flood> Get(Expression<Func<Flood, bool>> whereClause)
         {
-            using (UBContext ubc = new UBContext())
+            try
             {
-                if (whereClause == null)
+                using (UBContext ubc = new UBContext())
+                {
+                    if (whereClause == null)
+                        return ubc.Users_Flood
+                            .AsNoTracking()
+                            .ToList();
+
                     return ubc.Users_Flood
                         .AsNoTracking()
+                        .Where(whereClause)
                         .ToList();
 
-                return ubc.Users_Flood
-                    .AsNoTracking()
-                    .Where(whereClause)
-                    .ToList();
-
+                }
+            }
+            catch
+            {
+                return new List<Flood>();
             }
         }
     }

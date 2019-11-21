@@ -132,18 +132,25 @@ namespace Unifiedban.Data
         }
         public List<Button> Get(Expression<Func<Button, bool>> whereClause)
         {
-            using (UBContext ubc = new UBContext())
+            try
             {
-                if (whereClause == null)
+                using (UBContext ubc = new UBContext())
+                {
+                    if (whereClause == null)
+                        return ubc.Buttons
+                            .AsNoTracking()
+                            .ToList();
+
                     return ubc.Buttons
                         .AsNoTracking()
+                        .Where(whereClause)
                         .ToList();
 
-                return ubc.Buttons
-                    .AsNoTracking()
-                    .Where(whereClause)
-                    .ToList();
-
+                }
+            }
+            catch
+            {
+                return new List<Button>();
             }
         }
     }

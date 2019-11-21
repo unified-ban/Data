@@ -130,18 +130,25 @@ namespace Unifiedban.Data
         }
         public List<Operator> Get(Expression<Func<Operator, bool>> whereClause)
         {
-            using (UBContext ubc = new UBContext())
+            try
             {
-                if (whereClause == null)
+                using (UBContext ubc = new UBContext())
+                {
+                    if (whereClause == null)
+                        return ubc.Operators
+                            .AsNoTracking()
+                            .ToList();
+
                     return ubc.Operators
                         .AsNoTracking()
+                        .Where(whereClause)
                         .ToList();
 
-                return ubc.Operators
-                    .AsNoTracking()
-                    .Where(whereClause)
-                    .ToList();
-
+                }
+            }
+            catch
+            {
+                return new List<Operator>();
             }
         }
     }

@@ -133,18 +133,25 @@ namespace Unifiedban.Data
         }
         public List<Language> GetLanguage(Expression<Func<Language, bool>> whereClause)
         {
-            using (UBContext ubc = new UBContext())
+            try
             {
-                if (whereClause == null)
+                using (UBContext ubc = new UBContext())
+                {
+                    if (whereClause == null)
+                        return ubc.Languages
+                            .AsNoTracking()
+                            .ToList();
+
                     return ubc.Languages
                         .AsNoTracking()
+                        .Where(whereClause)
                         .ToList();
 
-                return ubc.Languages
-                    .AsNoTracking()
-                    .Where(whereClause)
-                    .ToList();
-
+                }
+            }
+            catch
+            {
+                return new List<Language>();
             }
         }
         #endregion
@@ -227,18 +234,25 @@ namespace Unifiedban.Data
         }
         public List<Key> GetKey(Expression<Func<Key, bool>> whereClause)
         {
-            using (UBContext ubc = new UBContext())
+            try
             {
-                if (whereClause == null)
+                using (UBContext ubc = new UBContext())
+                {
+                    if (whereClause == null)
+                        return ubc.TranslationKeys
+                            .AsNoTracking()
+                            .ToList();
+
                     return ubc.TranslationKeys
                         .AsNoTracking()
+                        .Where(whereClause)
                         .ToList();
 
-                return ubc.TranslationKeys
-                    .AsNoTracking()
-                    .Where(whereClause)
-                    .ToList();
-
+                }
+            }
+            catch
+            {
+                return new List<Key>();
             }
         }
         #endregion
@@ -364,20 +378,27 @@ namespace Unifiedban.Data
         }
         public List<Entry> GetEntry(Expression<Func<Entry, bool>> whereClause)
         {
-            using (UBContext ubc = new UBContext())
+            try
             {
-                if (whereClause == null)
+                using (UBContext ubc = new UBContext())
+                {
+                    if (whereClause == null)
+                        return ubc.TranslationEntries
+                            .AsNoTracking()
+                            .Include(x => x.Language)
+                            .ToList();
+
                     return ubc.TranslationEntries
                         .AsNoTracking()
+                        .Where(whereClause)
                         .Include(x => x.Language)
                         .ToList();
 
-                return ubc.TranslationEntries
-                    .AsNoTracking()
-                    .Where(whereClause)
-                    .Include(x => x.Language)
-                    .ToList();
-
+                }
+            }
+            catch
+            {
+                return new List<Entry>();
             }
         }
         #endregion

@@ -135,18 +135,25 @@ namespace Unifiedban.Data.Filters
         }
         public List<BadImage> Get(Expression<Func<BadImage, bool>> whereClause)
         {
-            using (UBContext ubc = new UBContext())
+            try
             {
-                if (whereClause == null)
+                using (UBContext ubc = new UBContext())
+                {
+                    if (whereClause == null)
+                        return ubc.BadImages
+                            .AsNoTracking()
+                            .ToList();
+
                     return ubc.BadImages
                         .AsNoTracking()
+                        .Where(whereClause)
                         .ToList();
 
-                return ubc.BadImages
-                    .AsNoTracking()
-                    .Where(whereClause)
-                    .ToList();
-
+                }
+            }
+            catch
+            {
+                return new List<BadImage>();
             }
         }
     }

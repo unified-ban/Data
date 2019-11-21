@@ -132,18 +132,25 @@ namespace Unifiedban.Data.Group
         }
         public List<DashboardUser> Get(Expression<Func<DashboardUser, bool>> whereClause)
         {
-            using (UBContext ubc = new UBContext())
+            try
             {
-                if (whereClause == null)
+                using (UBContext ubc = new UBContext())
+                {
+                    if (whereClause == null)
+                        return ubc.Group_DashboardUsers
+                            .AsNoTracking()
+                            .ToList();
+
                     return ubc.Group_DashboardUsers
                         .AsNoTracking()
+                        .Where(whereClause)
                         .ToList();
 
-                return ubc.Group_DashboardUsers
-                    .AsNoTracking()
-                    .Where(whereClause)
-                    .ToList();
-
+                }
+            }
+            catch
+            {
+                return new List<DashboardUser>();
             }
         }
     }
