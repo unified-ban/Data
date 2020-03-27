@@ -21,9 +21,44 @@ namespace Unifiedban.Data.User
             {
                 try
                 {
-                    ubc.Add(banned);
-                    ubc.SaveChanges();
-                    return banned;
+                    using (var transaction = ubc.Database.BeginTransaction())
+                    {
+                        try
+                        {
+                            ubc.Add(banned);
+                            ubc.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.User_Banned ON;");
+                            ubc.SaveChanges();
+                            ubc.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.User_Banned OFF");
+                            transaction.Commit();
+
+                            return banned;
+                        }
+                        catch (Exception ex)
+                        {
+                            Utils.Logging.AddLog(new SystemLog()
+                            {
+                                LoggerName = "Unifiedban",
+                                Date = DateTime.Now,
+                                Function = "Unifiedban.Data.BannedService.Add",
+                                Level = SystemLog.Levels.Warn,
+                                Message = ex.Message,
+                                UserId = callerId
+                            });
+                            if (ex.InnerException != null)
+                                Utils.Logging.AddLog(new SystemLog()
+                                {
+                                    LoggerName = "Unifiedban.Data",
+                                    Date = DateTime.Now,
+                                    Function = "Unifiedban.Data.BannedService.Add",
+                                    Level = SystemLog.Levels.Warn,
+                                    Message = ex.InnerException.Message,
+                                    UserId = callerId
+                                });
+
+                            return null;
+                        }
+
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -55,7 +90,7 @@ namespace Unifiedban.Data.User
             using (UBContext ubc = new UBContext())
             {
                 Banned exists = ubc.Users_Banned
-                    .Where(x => x.BannerUserId == banned.BannerUserId)
+                    .Where(x => x.TelegramUserId == banned.TelegramUserId)
                     .FirstOrDefault();
                 if (exists == null)
                     return SystemLog.ErrorCodes.Error;

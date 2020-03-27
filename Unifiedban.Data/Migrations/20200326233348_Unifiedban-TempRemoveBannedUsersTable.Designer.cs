@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Unifiedban.Data;
 
 namespace Unifiedban.Data.Migrations
 {
     [DbContext(typeof(UBContext))]
-    partial class UBContextModelSnapshot : ModelSnapshot
+    [Migration("20200326233348_Unifiedban-TempRemoveBannedUsersTable")]
+    partial class UnifiedbanTempRemoveBannedUsersTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -410,21 +412,6 @@ namespace Unifiedban.Data.Migrations
                             Status = 0,
                             UniversalCode = "it-IT"
                         });
-                });
-
-            modelBuilder.Entity("Unifiedban.Models.User.Banned", b =>
-                {
-                    b.Property<int>("TelegramUserId")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Reason");
-
-                    b.Property<DateTime>("UtcDate");
-
-                    b.HasKey("TelegramUserId");
-
-                    b.ToTable("User_Banned","dbo");
                 });
 
             modelBuilder.Entity("Unifiedban.Models.User.Flood", b =>
