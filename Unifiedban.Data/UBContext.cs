@@ -1,4 +1,4 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
+﻿/* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
@@ -65,6 +65,7 @@ namespace Unifiedban.Data
         #region " Filters "
         public DbSet<BadWord> BadWords { get; set; }
         public DbSet<BadImage> BadImages { get; set; }
+        public DbSet<SafeTName> SafeTNames { get; set; }
         #endregion
 
         #endregion
@@ -124,13 +125,6 @@ namespace Unifiedban.Data
 
             modelBuilder.Entity<Flood>()
                 .HasKey(x => new { x.TelegramUserId, x.GroupId });
-
-            modelBuilder.Entity<Banned>()
-                .HasKey(x => new { x.TelegramUserId, x.GroupId });
-            modelBuilder.Entity<Banned>()
-                .HasIndex(x => x.GroupId);
-            modelBuilder.Entity<Banned>()
-                .HasIndex(x => x.TelegramUserId);
         }
 
         private void OnModelCreating_Group(ModelBuilder modelBuilder)
@@ -168,8 +162,14 @@ namespace Unifiedban.Data
                 .HasIndex(x => x.GroupId);
             modelBuilder.Entity<BadWord>()
                 .HasIndex(x => x.Name);
+
             modelBuilder.Entity<BadImage>()
                 .HasIndex(x => x.GroupId);
+
+            modelBuilder.Entity<SafeTName>()
+                .HasKey(x => new { x.Username, x.TelegramChatId });
+            modelBuilder.Entity<SafeTName>()
+                .HasIndex(x => x.TelegramChatId);
         }
 
     }
