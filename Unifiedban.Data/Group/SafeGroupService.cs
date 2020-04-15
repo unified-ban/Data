@@ -62,6 +62,7 @@ namespace Unifiedban.Data.Group
 
                 try
                 {
+                    ubc.Remove(exists);
                     ubc.SaveChanges();
                     return SystemLog.ErrorCodes.OK;
                 }
