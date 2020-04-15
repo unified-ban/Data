@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <Version>1.0.0-beta.8</Version>
+    <Version>1.0.0-beta.9</Version>
     <Authors>SubPixel for linux/hub</Authors>
     <Product>Unifiedban Data</Product>
     <Copyright>LinuxHub 2019</Copyright>

@@ -99,13 +99,15 @@ namespace Unifiedban.Data
             using (UBContext ubc = new UBContext())
             {
                 Button exists = ubc.Buttons
-                    .Where(x => x.ButtonId == button.ButtonId)
+                    .Where(x => x.ButtonId == button.ButtonId ||
+                        (x.GroupId == button.GroupId && x.Name == button.Name))
                     .FirstOrDefault();
                 if (exists == null)
                     return SystemLog.ErrorCodes.Error;
 
                 try
                 {
+                    ubc.Remove(exists);
                     ubc.SaveChanges();
                     return SystemLog.ErrorCodes.OK;
                 }
