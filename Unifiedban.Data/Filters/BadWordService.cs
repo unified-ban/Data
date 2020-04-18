@@ -108,6 +108,7 @@ namespace Unifiedban.Data.Filters
 
                 try
                 {
+                    ubc.Remove(exists);
                     ubc.SaveChanges();
                     return SystemLog.ErrorCodes.OK;
                 }
