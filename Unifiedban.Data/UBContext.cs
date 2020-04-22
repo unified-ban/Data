@@ -29,6 +29,7 @@ namespace Unifiedban.Data
         public DbSet<SystemLog> SystemLogs { get; set; }
         public DbSet<OperationLog> OperationLogs { get; set; }
         public DbSet<ActionLog> ActionLogs { get; set; }
+        public DbSet<SupportSessionLog> SupportSessionLogs { get; set; }
         #endregion
 
         #region " Config "
@@ -116,6 +117,9 @@ namespace Unifiedban.Data
             OnModelCreating_User(modelBuilder);
             OnModelCreating_Group(modelBuilder);
             OnModelCreating_Filters(modelBuilder);
+
+            modelBuilder.Entity<SupportSessionLog>()
+                .HasKey(x => x.LogId);
         }
 
         private void OnModelCreating_User(ModelBuilder modelBuilder)
