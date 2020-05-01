@@ -55,7 +55,7 @@ namespace Unifiedban.Data.Group
             using (UBContext ubc = new UBContext())
             {
                 NightSchedule exists = ubc.Group_NightSchedules
-                    .Where(x => x.NightScheduleId == nightSchedule.NightScheduleId)
+                    .Where(x => x.GroupId == nightSchedule.GroupId)
                     .FirstOrDefault();
                 if (exists == null)
                     return null;
@@ -106,6 +106,7 @@ namespace Unifiedban.Data.Group
 
                 try
                 {
+                    ubc.Remove(exists);
                     ubc.SaveChanges();
                     return SystemLog.ErrorCodes.OK;
                 }

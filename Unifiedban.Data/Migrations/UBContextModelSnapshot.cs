@@ -217,9 +217,9 @@ namespace Unifiedban.Data.Migrations
 
                     b.Property<int>("State");
 
-                    b.Property<DateTime>("UtcEndDate");
+                    b.Property<DateTime?>("UtcEndDate");
 
-                    b.Property<DateTime>("UtcStartDate");
+                    b.Property<DateTime?>("UtcStartDate");
 
                     b.HasKey("NightScheduleId");
 
