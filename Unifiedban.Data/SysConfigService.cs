@@ -12,17 +12,17 @@ using Unifiedban.Models;
 
 namespace Unifiedban.Data
 {
-    public class ButtonService
+    public class SysConfigService
     {
-        public Button Add(Button button, int callerId)
+        public SysConfig Add(SysConfig sysConfig, int callerId)
         {
             using (UBContext ubc = new UBContext())
             {
                 try
                 {
-                    ubc.Add(button);
+                    ubc.Add(sysConfig);
                     ubc.SaveChanges();
-                    return button;
+                    return sysConfig;
                 }
                 catch (Exception ex)
                 {
@@ -30,7 +30,7 @@ namespace Unifiedban.Data
                     {
                         LoggerName = "Unifiedban",
                         Date = DateTime.Now,
-                        Function = "Unifiedban.Data.ButtonService.Add",
+                        Function = "Unifiedban.Data.SysConfigService.Add",
                         Level = SystemLog.Levels.Warn,
                         Message = ex.Message,
                         UserId = callerId
@@ -40,7 +40,7 @@ namespace Unifiedban.Data
                         {
                             LoggerName = "Unifiedban.Data",
                             Date = DateTime.Now,
-                            Function = "Unifiedban.Data.ButtonService.Add",
+                            Function = "Unifiedban.Data.SysConfigService.Add",
                             Level = SystemLog.Levels.Warn,
                             Message = ex.InnerException.Message,
                             UserId = callerId
@@ -49,25 +49,22 @@ namespace Unifiedban.Data
                 return null;
             }
         }
-        public Button Update(Button button, int callerId)
+        public SysConfig Update(SysConfig sysConfig, int callerId)
         {
             using (UBContext ubc = new UBContext())
             {
-                Button exists = ubc.Buttons
-                    .Where(x => x.ButtonId == button.ButtonId)
+                SysConfig exists = ubc.SysConfigs
+                    .Where(x => x.SysConfigId == sysConfig.SysConfigId)
                     .FirstOrDefault();
                 if (exists == null)
                     return null;
 
                 try
                 {
-                    exists.Name = button.Name;
-                    exists.Content = button.Content;
-                    exists.Scope = button.Scope;
-                    exists.GroupId = button.GroupId;
+                    exists.Value = sysConfig.Value;
 
                     ubc.SaveChanges();
-                    return button;
+                    return sysConfig;
                 }
                 catch (Exception ex)
                 {
@@ -75,7 +72,7 @@ namespace Unifiedban.Data
                     {
                         LoggerName = "Unifiedban",
                         Date = DateTime.Now,
-                        Function = "Unifiedban.Data.ButtonService.Update",
+                        Function = "Unifiedban.Data.SysConfigService.Update",
                         Level = SystemLog.Levels.Warn,
                         Message = ex.Message,
                         UserId = callerId
@@ -85,7 +82,7 @@ namespace Unifiedban.Data
                         {
                             LoggerName = "Unifiedban.Data",
                             Date = DateTime.Now,
-                            Function = "Unifiedban.Data.ButtonService.Update",
+                            Function = "Unifiedban.Data.SysConfigService.Update",
                             Level = SystemLog.Levels.Warn,
                             Message = ex.InnerException.Message,
                             UserId = callerId
@@ -94,20 +91,18 @@ namespace Unifiedban.Data
                 return null;
             }
         }
-        public SystemLog.ErrorCodes Remove(Button button, int callerId)
+        public SystemLog.ErrorCodes Remove(SysConfig sysConfig, int callerId)
         {
             using (UBContext ubc = new UBContext())
             {
-                Button exists = ubc.Buttons
-                    .Where(x => x.ButtonId == button.ButtonId ||
-                        (x.GroupId == button.GroupId && x.Name == button.Name))
+                SysConfig exists = ubc.SysConfigs
+                    .Where(x => x.SysConfigId == sysConfig.SysConfigId)
                     .FirstOrDefault();
                 if (exists == null)
                     return SystemLog.ErrorCodes.Error;
 
                 try
                 {
-                    ubc.Remove(exists);
                     ubc.SaveChanges();
                     return SystemLog.ErrorCodes.OK;
                 }
@@ -117,7 +112,7 @@ namespace Unifiedban.Data
                     {
                         LoggerName = "Unifiedban",
                         Date = DateTime.Now,
-                        Function = "Unifiedban.Data.ButtonService.Remove",
+                        Function = "Unifiedban.Data.SysConfigService.Remove",
                         Level = SystemLog.Levels.Warn,
                         Message = ex.Message,
                         UserId = callerId
@@ -127,7 +122,7 @@ namespace Unifiedban.Data
                         {
                             LoggerName = "Unifiedban.Data",
                             Date = DateTime.Now,
-                            Function = "Unifiedban.Data.ButtonService.Remove",
+                            Function = "Unifiedban.Data.SysConfigService.Remove",
                             Level = SystemLog.Levels.Warn,
                             Message = ex.InnerException.Message,
                             UserId = callerId
@@ -136,18 +131,18 @@ namespace Unifiedban.Data
                 return SystemLog.ErrorCodes.Error;
             }
         }
-        public List<Button> Get(Expression<Func<Button, bool>> whereClause)
+        public List<SysConfig> Get(Expression<Func<SysConfig, bool>> whereClause)
         {
             try
             {
                 using (UBContext ubc = new UBContext())
                 {
                     if (whereClause == null)
-                        return ubc.Buttons
+                        return ubc.SysConfigs
                             .AsNoTracking()
                             .ToList();
 
-                    return ubc.Buttons
+                    return ubc.SysConfigs
                         .AsNoTracking()
                         .Where(whereClause)
                         .ToList();
@@ -156,7 +151,7 @@ namespace Unifiedban.Data
             }
             catch
             {
-                return new List<Button>();
+                return new List<SysConfig>();
             }
         }
     }

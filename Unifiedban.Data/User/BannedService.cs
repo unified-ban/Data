@@ -1,4 +1,8 @@
-﻿using System;
+﻿/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -17,9 +21,44 @@ namespace Unifiedban.Data.User
             {
                 try
                 {
-                    ubc.Add(banned);
-                    ubc.SaveChanges();
-                    return banned;
+                    using (var transaction = ubc.Database.BeginTransaction())
+                    {
+                        try
+                        {
+                            ubc.Add(banned);
+                            ubc.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.User_Banned ON;");
+                            ubc.SaveChanges();
+                            ubc.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.User_Banned OFF");
+                            transaction.Commit();
+
+                            return banned;
+                        }
+                        catch (Exception ex)
+                        {
+                            Utils.Logging.AddLog(new SystemLog()
+                            {
+                                LoggerName = "Unifiedban",
+                                Date = DateTime.Now,
+                                Function = "Unifiedban.Data.BannedService.Add",
+                                Level = SystemLog.Levels.Warn,
+                                Message = ex.Message,
+                                UserId = callerId
+                            });
+                            if (ex.InnerException != null)
+                                Utils.Logging.AddLog(new SystemLog()
+                                {
+                                    LoggerName = "Unifiedban.Data",
+                                    Date = DateTime.Now,
+                                    Function = "Unifiedban.Data.BannedService.Add",
+                                    Level = SystemLog.Levels.Warn,
+                                    Message = ex.InnerException.Message,
+                                    UserId = callerId
+                                });
+
+                            return null;
+                        }
+
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -46,13 +85,12 @@ namespace Unifiedban.Data.User
                 return null;
             }
         }
-
         public SystemLog.ErrorCodes Remove(Banned banned, int callerId)
         {
             using (UBContext ubc = new UBContext())
             {
                 Banned exists = ubc.Users_Banned
-                    .Where(x => x.BannerUserId == banned.BannerUserId)
+                    .Where(x => x.TelegramUserId == banned.TelegramUserId)
                     .FirstOrDefault();
                 if (exists == null)
                     return SystemLog.ErrorCodes.Error;
@@ -89,18 +127,25 @@ namespace Unifiedban.Data.User
         }
         public List<Banned> Get(Expression<Func<Banned, bool>> whereClause)
         {
-            using (UBContext ubc = new UBContext())
+            try
             {
-                if (whereClause == null)
+                using (UBContext ubc = new UBContext())
+                {
+                    if (whereClause == null)
+                        return ubc.Users_Banned
+                            .AsNoTracking()
+                            .ToList();
+
                     return ubc.Users_Banned
                         .AsNoTracking()
+                        .Where(whereClause)
                         .ToList();
 
-                return ubc.Users_Banned
-                    .AsNoTracking()
-                    .Where(whereClause)
-                    .ToList();
-
+                }
+            }
+            catch
+            {
+                return new List<Banned>();
             }
         }
     }

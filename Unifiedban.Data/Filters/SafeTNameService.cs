@@ -9,20 +9,21 @@ using System.Linq.Expressions;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Unifiedban.Models;
+using Unifiedban.Models.Filters;
 
-namespace Unifiedban.Data
+namespace Unifiedban.Data.Filters
 {
-    public class ButtonService
+    public class SafeTNameService
     {
-        public Button Add(Button button, int callerId)
+        public SafeTName Add(SafeTName safeTName, int callerId)
         {
             using (UBContext ubc = new UBContext())
             {
                 try
                 {
-                    ubc.Add(button);
+                    ubc.Add(safeTName);
                     ubc.SaveChanges();
-                    return button;
+                    return safeTName;
                 }
                 catch (Exception ex)
                 {
@@ -30,7 +31,7 @@ namespace Unifiedban.Data
                     {
                         LoggerName = "Unifiedban",
                         Date = DateTime.Now,
-                        Function = "Unifiedban.Data.ButtonService.Add",
+                        Function = "Unifiedban.Data.SafeTNameService.Add",
                         Level = SystemLog.Levels.Warn,
                         Message = ex.Message,
                         UserId = callerId
@@ -40,7 +41,7 @@ namespace Unifiedban.Data
                         {
                             LoggerName = "Unifiedban.Data",
                             Date = DateTime.Now,
-                            Function = "Unifiedban.Data.ButtonService.Add",
+                            Function = "Unifiedban.Data.SafeTNameService.Add",
                             Level = SystemLog.Levels.Warn,
                             Message = ex.InnerException.Message,
                             UserId = callerId
@@ -49,25 +50,25 @@ namespace Unifiedban.Data
                 return null;
             }
         }
-        public Button Update(Button button, int callerId)
+        public SafeTName Update(SafeTName safeTName,
+            SafeTName newSafeTName, int callerId)
         {
             using (UBContext ubc = new UBContext())
             {
-                Button exists = ubc.Buttons
-                    .Where(x => x.ButtonId == button.ButtonId)
+                SafeTName exists = ubc.SafeTNames
+                    .Where(x => x.Username == safeTName.Username &&
+                        x.TelegramChatId == safeTName.TelegramChatId)
                     .FirstOrDefault();
                 if (exists == null)
                     return null;
 
                 try
                 {
-                    exists.Name = button.Name;
-                    exists.Content = button.Content;
-                    exists.Scope = button.Scope;
-                    exists.GroupId = button.GroupId;
+                    exists.Username = newSafeTName.Username;
+                    exists.TelegramChatId = newSafeTName.TelegramChatId;
 
                     ubc.SaveChanges();
-                    return button;
+                    return safeTName;
                 }
                 catch (Exception ex)
                 {
@@ -75,7 +76,7 @@ namespace Unifiedban.Data
                     {
                         LoggerName = "Unifiedban",
                         Date = DateTime.Now,
-                        Function = "Unifiedban.Data.ButtonService.Update",
+                        Function = "Unifiedban.Data.SafeTNameService.Update",
                         Level = SystemLog.Levels.Warn,
                         Message = ex.Message,
                         UserId = callerId
@@ -85,7 +86,7 @@ namespace Unifiedban.Data
                         {
                             LoggerName = "Unifiedban.Data",
                             Date = DateTime.Now,
-                            Function = "Unifiedban.Data.ButtonService.Update",
+                            Function = "Unifiedban.Data.SafeTNameService.Update",
                             Level = SystemLog.Levels.Warn,
                             Message = ex.InnerException.Message,
                             UserId = callerId
@@ -94,20 +95,19 @@ namespace Unifiedban.Data
                 return null;
             }
         }
-        public SystemLog.ErrorCodes Remove(Button button, int callerId)
+        public SystemLog.ErrorCodes Remove(SafeTName safeTName, int callerId)
         {
             using (UBContext ubc = new UBContext())
             {
-                Button exists = ubc.Buttons
-                    .Where(x => x.ButtonId == button.ButtonId ||
-                        (x.GroupId == button.GroupId && x.Name == button.Name))
+                SafeTName exists = ubc.SafeTNames
+                    .Where(x => x.Username == safeTName.Username &&
+                        x.TelegramChatId == safeTName.TelegramChatId)
                     .FirstOrDefault();
                 if (exists == null)
                     return SystemLog.ErrorCodes.Error;
 
                 try
                 {
-                    ubc.Remove(exists);
                     ubc.SaveChanges();
                     return SystemLog.ErrorCodes.OK;
                 }
@@ -117,7 +117,7 @@ namespace Unifiedban.Data
                     {
                         LoggerName = "Unifiedban",
                         Date = DateTime.Now,
-                        Function = "Unifiedban.Data.ButtonService.Remove",
+                        Function = "Unifiedban.Data.SafeTNameService.Remove",
                         Level = SystemLog.Levels.Warn,
                         Message = ex.Message,
                         UserId = callerId
@@ -127,7 +127,7 @@ namespace Unifiedban.Data
                         {
                             LoggerName = "Unifiedban.Data",
                             Date = DateTime.Now,
-                            Function = "Unifiedban.Data.ButtonService.Remove",
+                            Function = "Unifiedban.Data.SafeTNameService.Remove",
                             Level = SystemLog.Levels.Warn,
                             Message = ex.InnerException.Message,
                             UserId = callerId
@@ -136,18 +136,18 @@ namespace Unifiedban.Data
                 return SystemLog.ErrorCodes.Error;
             }
         }
-        public List<Button> Get(Expression<Func<Button, bool>> whereClause)
+        public List<SafeTName> Get(Expression<Func<SafeTName, bool>> whereClause)
         {
             try
             {
                 using (UBContext ubc = new UBContext())
                 {
                     if (whereClause == null)
-                        return ubc.Buttons
+                        return ubc.SafeTNames
                             .AsNoTracking()
                             .ToList();
 
-                    return ubc.Buttons
+                    return ubc.SafeTNames
                         .AsNoTracking()
                         .Where(whereClause)
                         .ToList();
@@ -156,7 +156,7 @@ namespace Unifiedban.Data
             }
             catch
             {
-                return new List<Button>();
+                return new List<SafeTName>();
             }
         }
     }

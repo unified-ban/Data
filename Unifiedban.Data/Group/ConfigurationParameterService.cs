@@ -2,27 +2,28 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
-using Microsoft.EntityFrameworkCore;
 using Unifiedban.Models;
+using Unifiedban.Models.Group;
 
-namespace Unifiedban.Data
+namespace Unifiedban.Data.Group
 {
-    public class ButtonService
+    public class ConfigurationParameterService
     {
-        public Button Add(Button button, int callerId)
+        public ConfigurationParameter Add(ConfigurationParameter configurationParameter, int callerId)
         {
             using (UBContext ubc = new UBContext())
             {
                 try
                 {
-                    ubc.Add(button);
+                    ubc.Add(configurationParameter);
                     ubc.SaveChanges();
-                    return button;
+                    return configurationParameter;
                 }
                 catch (Exception ex)
                 {
@@ -30,7 +31,7 @@ namespace Unifiedban.Data
                     {
                         LoggerName = "Unifiedban",
                         Date = DateTime.Now,
-                        Function = "Unifiedban.Data.ButtonService.Add",
+                        Function = "Unifiedban.Data.ConfigurationParameterService.Add",
                         Level = SystemLog.Levels.Warn,
                         Message = ex.Message,
                         UserId = callerId
@@ -40,7 +41,7 @@ namespace Unifiedban.Data
                         {
                             LoggerName = "Unifiedban.Data",
                             Date = DateTime.Now,
-                            Function = "Unifiedban.Data.ButtonService.Add",
+                            Function = "Unifiedban.Data.ConfigurationParameterService.Add",
                             Level = SystemLog.Levels.Warn,
                             Message = ex.InnerException.Message,
                             UserId = callerId
@@ -49,25 +50,24 @@ namespace Unifiedban.Data
                 return null;
             }
         }
-        public Button Update(Button button, int callerId)
+        public ConfigurationParameter Update(ConfigurationParameter configurationParameter, int callerId)
         {
             using (UBContext ubc = new UBContext())
             {
-                Button exists = ubc.Buttons
-                    .Where(x => x.ButtonId == button.ButtonId)
+                ConfigurationParameter exists = ubc.Group_ConfigurationParameters
+                    .Where(x => x.ConfigurationParameterId == configurationParameter.ConfigurationParameterId)
                     .FirstOrDefault();
                 if (exists == null)
                     return null;
 
                 try
                 {
-                    exists.Name = button.Name;
-                    exists.Content = button.Content;
-                    exists.Scope = button.Scope;
-                    exists.GroupId = button.GroupId;
+                    exists.Value = configurationParameter.Value;
+                    exists.Type = configurationParameter.Type;
+                    exists.Values = configurationParameter.Values;
 
                     ubc.SaveChanges();
-                    return button;
+                    return configurationParameter;
                 }
                 catch (Exception ex)
                 {
@@ -75,7 +75,7 @@ namespace Unifiedban.Data
                     {
                         LoggerName = "Unifiedban",
                         Date = DateTime.Now,
-                        Function = "Unifiedban.Data.ButtonService.Update",
+                        Function = "Unifiedban.Data.ConfigurationParameterService.Update",
                         Level = SystemLog.Levels.Warn,
                         Message = ex.Message,
                         UserId = callerId
@@ -85,7 +85,7 @@ namespace Unifiedban.Data
                         {
                             LoggerName = "Unifiedban.Data",
                             Date = DateTime.Now,
-                            Function = "Unifiedban.Data.ButtonService.Update",
+                            Function = "Unifiedban.Data.ConfigurationParameterService.Update",
                             Level = SystemLog.Levels.Warn,
                             Message = ex.InnerException.Message,
                             UserId = callerId
@@ -94,20 +94,18 @@ namespace Unifiedban.Data
                 return null;
             }
         }
-        public SystemLog.ErrorCodes Remove(Button button, int callerId)
+        public SystemLog.ErrorCodes Remove(ConfigurationParameter configurationParameter, int callerId)
         {
             using (UBContext ubc = new UBContext())
             {
-                Button exists = ubc.Buttons
-                    .Where(x => x.ButtonId == button.ButtonId ||
-                        (x.GroupId == button.GroupId && x.Name == button.Name))
+                ConfigurationParameter exists = ubc.Group_ConfigurationParameters
+                    .Where(x => x.ConfigurationParameterId == configurationParameter.ConfigurationParameterId)
                     .FirstOrDefault();
                 if (exists == null)
                     return SystemLog.ErrorCodes.Error;
 
                 try
                 {
-                    ubc.Remove(exists);
                     ubc.SaveChanges();
                     return SystemLog.ErrorCodes.OK;
                 }
@@ -117,7 +115,7 @@ namespace Unifiedban.Data
                     {
                         LoggerName = "Unifiedban",
                         Date = DateTime.Now,
-                        Function = "Unifiedban.Data.ButtonService.Remove",
+                        Function = "Unifiedban.Data.ConfigurationParameterService.Remove",
                         Level = SystemLog.Levels.Warn,
                         Message = ex.Message,
                         UserId = callerId
@@ -127,7 +125,7 @@ namespace Unifiedban.Data
                         {
                             LoggerName = "Unifiedban.Data",
                             Date = DateTime.Now,
-                            Function = "Unifiedban.Data.ButtonService.Remove",
+                            Function = "Unifiedban.Data.ConfigurationParameterService.Remove",
                             Level = SystemLog.Levels.Warn,
                             Message = ex.InnerException.Message,
                             UserId = callerId
@@ -136,18 +134,18 @@ namespace Unifiedban.Data
                 return SystemLog.ErrorCodes.Error;
             }
         }
-        public List<Button> Get(Expression<Func<Button, bool>> whereClause)
+        public List<ConfigurationParameter> Get(Expression<Func<ConfigurationParameter, bool>> whereClause)
         {
             try
             {
                 using (UBContext ubc = new UBContext())
                 {
                     if (whereClause == null)
-                        return ubc.Buttons
+                        return ubc.Group_ConfigurationParameters
                             .AsNoTracking()
                             .ToList();
 
-                    return ubc.Buttons
+                    return ubc.Group_ConfigurationParameters
                         .AsNoTracking()
                         .Where(whereClause)
                         .ToList();
@@ -156,7 +154,7 @@ namespace Unifiedban.Data
             }
             catch
             {
-                return new List<Button>();
+                return new List<ConfigurationParameter>();
             }
         }
     }

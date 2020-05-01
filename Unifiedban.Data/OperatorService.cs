@@ -1,25 +1,28 @@
-﻿using System;
+﻿/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Unifiedban.Models;
-using Unifiedban.Models.Filters;
 
-namespace Unifiedban.Data.Filters
+namespace Unifiedban.Data
 {
-    public class ImageService
+    public class OperatorService
     {
-        public Image Add(Image image, int callerId)
+        public Operator Add(Operator oper, int callerId)
         {
             using (UBContext ubc = new UBContext())
             {
                 try
                 {
-                    ubc.Add(image);
+                    ubc.Add(oper);
                     ubc.SaveChanges();
-                    return image;
+                    return oper;
                 }
                 catch (Exception ex)
                 {
@@ -27,7 +30,7 @@ namespace Unifiedban.Data.Filters
                     {
                         LoggerName = "Unifiedban",
                         Date = DateTime.Now,
-                        Function = "Unifiedban.Data.ImageService.Add",
+                        Function = "Unifiedban.Data.OperatorService.Add",
                         Level = SystemLog.Levels.Warn,
                         Message = ex.Message,
                         UserId = callerId
@@ -37,7 +40,7 @@ namespace Unifiedban.Data.Filters
                         {
                             LoggerName = "Unifiedban.Data",
                             Date = DateTime.Now,
-                            Function = "Unifiedban.Data.ImageService.Add",
+                            Function = "Unifiedban.Data.OperatorService.Add",
                             Level = SystemLog.Levels.Warn,
                             Message = ex.InnerException.Message,
                             UserId = callerId
@@ -46,27 +49,23 @@ namespace Unifiedban.Data.Filters
                 return null;
             }
         }
-        public Image Update(Image image, int callerId)
+        public Operator Update(Operator oper, int callerId)
         {
             using (UBContext ubc = new UBContext())
             {
-                Image exists = ubc.Images
-                    .Where(x => x.ImageId == image.ImageId)
+                Operator exists = ubc.Operators
+                    .Where(x => x.OperatorId == oper.OperatorId)
                     .FirstOrDefault();
                 if (exists == null)
                     return null;
 
                 try
                 {
-                    exists.TelegramChatId = image.TelegramChatId;
-                    exists.HashData = image.HashData;
-                    exists.ParentImageId = image.ParentImageId;
-                    exists.FlipType = image.FlipType;
-                    exists.Status = image.Status;
-                    exists.Match = image.Match;
+                    exists.TelegramUserId = oper.TelegramUserId;
+                    exists.Level = oper.Level;
 
                     ubc.SaveChanges();
-                    return image;
+                    return oper;
                 }
                 catch (Exception ex)
                 {
@@ -74,7 +73,7 @@ namespace Unifiedban.Data.Filters
                     {
                         LoggerName = "Unifiedban",
                         Date = DateTime.Now,
-                        Function = "Unifiedban.Data.ImageService.Update",
+                        Function = "Unifiedban.Data.OperatorService.Update",
                         Level = SystemLog.Levels.Warn,
                         Message = ex.Message,
                         UserId = callerId
@@ -84,7 +83,7 @@ namespace Unifiedban.Data.Filters
                         {
                             LoggerName = "Unifiedban.Data",
                             Date = DateTime.Now,
-                            Function = "Unifiedban.Data.ImageService.Update",
+                            Function = "Unifiedban.Data.OperatorService.Update",
                             Level = SystemLog.Levels.Warn,
                             Message = ex.InnerException.Message,
                             UserId = callerId
@@ -93,12 +92,12 @@ namespace Unifiedban.Data.Filters
                 return null;
             }
         }
-        public SystemLog.ErrorCodes Remove(Image image, int callerId)
+        public SystemLog.ErrorCodes Remove(Operator oper, int callerId)
         {
             using (UBContext ubc = new UBContext())
             {
-                Image exists = ubc.Images
-                    .Where(x => x.ImageId == image.ImageId)
+                Operator exists = ubc.Operators
+                    .Where(x => x.OperatorId == oper.OperatorId)
                     .FirstOrDefault();
                 if (exists == null)
                     return SystemLog.ErrorCodes.Error;
@@ -114,7 +113,7 @@ namespace Unifiedban.Data.Filters
                     {
                         LoggerName = "Unifiedban",
                         Date = DateTime.Now,
-                        Function = "Unifiedban.Data.ImageService.Remove",
+                        Function = "Unifiedban.Data.OperatorService.Remove",
                         Level = SystemLog.Levels.Warn,
                         Message = ex.Message,
                         UserId = callerId
@@ -124,7 +123,7 @@ namespace Unifiedban.Data.Filters
                         {
                             LoggerName = "Unifiedban.Data",
                             Date = DateTime.Now,
-                            Function = "Unifiedban.Data.ImageService.Remove",
+                            Function = "Unifiedban.Data.OperatorService.Remove",
                             Level = SystemLog.Levels.Warn,
                             Message = ex.InnerException.Message,
                             UserId = callerId
@@ -133,20 +132,27 @@ namespace Unifiedban.Data.Filters
                 return SystemLog.ErrorCodes.Error;
             }
         }
-        public List<Image> Get(Expression<Func<Image, bool>> whereClause)
+        public List<Operator> Get(Expression<Func<Operator, bool>> whereClause)
         {
-            using (UBContext ubc = new UBContext())
+            try
             {
-                if (whereClause == null)
-                    return ubc.Images
+                using (UBContext ubc = new UBContext())
+                {
+                    if (whereClause == null)
+                        return ubc.Operators
+                            .AsNoTracking()
+                            .ToList();
+
+                    return ubc.Operators
                         .AsNoTracking()
+                        .Where(whereClause)
                         .ToList();
 
-                return ubc.Images
-                    .AsNoTracking()
-                    .Where(whereClause)
-                    .ToList();
-
+                }
+            }
+            catch
+            {
+                return new List<Operator>();
             }
         }
     }

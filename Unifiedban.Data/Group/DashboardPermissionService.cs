@@ -1,4 +1,8 @@
-﻿using System;
+﻿/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -58,6 +62,7 @@ namespace Unifiedban.Data.Group
 
                 try
                 {
+                    exists.GroupId = dashboardPermission.GroupId;
                     exists.State = dashboardPermission.State;
                     exists.LastUpdateUtc = dashboardPermission.LastUpdateUtc;
 
@@ -131,18 +136,25 @@ namespace Unifiedban.Data.Group
         }
         public List<DashboardPermission> Get(Expression<Func<DashboardPermission, bool>> whereClause)
         {
-            using (UBContext ubc = new UBContext())
+            try
             {
-                if (whereClause == null)
+                using (UBContext ubc = new UBContext())
+                {
+                    if (whereClause == null)
+                        return ubc.Group_DashboardPermissions
+                            .AsNoTracking()
+                            .ToList();
+
                     return ubc.Group_DashboardPermissions
                         .AsNoTracking()
+                        .Where(whereClause)
                         .ToList();
 
-                return ubc.Group_DashboardPermissions
-                    .AsNoTracking()
-                    .Where(whereClause)
-                    .ToList();
-
+                }
+            }
+            catch
+            {
+                return new List<DashboardPermission>();
             }
         }
     }

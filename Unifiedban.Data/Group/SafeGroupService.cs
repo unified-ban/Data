@@ -1,4 +1,8 @@
-﻿using System;
+﻿/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -51,13 +55,14 @@ namespace Unifiedban.Data.Group
             using (UBContext ubc = new UBContext())
             {
                 SafeGroup exists = ubc.Group_SafeGroups
-                    .Where(x => x.TelegramChatId == safeGroup.TelegramChatId)
+                    .Where(x => x.GroupId == safeGroup.GroupId)
                     .FirstOrDefault();
                 if (exists == null)
                     return SystemLog.ErrorCodes.Error;
 
                 try
                 {
+                    ubc.Remove(exists);
                     ubc.SaveChanges();
                     return SystemLog.ErrorCodes.OK;
                 }
@@ -88,18 +93,25 @@ namespace Unifiedban.Data.Group
         }
         public List<SafeGroup> Get(Expression<Func<SafeGroup, bool>> whereClause)
         {
-            using (UBContext ubc = new UBContext())
+            try
             {
-                if (whereClause == null)
+                using (UBContext ubc = new UBContext())
+                {
+                    if (whereClause == null)
+                        return ubc.Group_SafeGroups
+                            .AsNoTracking()
+                            .ToList();
+
                     return ubc.Group_SafeGroups
                         .AsNoTracking()
+                        .Where(whereClause)
                         .ToList();
 
-                return ubc.Group_SafeGroups
-                    .AsNoTracking()
-                    .Where(whereClause)
-                    .ToList();
-
+                }
+            }
+            catch
+            {
+                return new List<SafeGroup>();
             }
         }
     }

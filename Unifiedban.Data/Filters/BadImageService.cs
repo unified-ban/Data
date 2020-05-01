@@ -9,20 +9,21 @@ using System.Linq.Expressions;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Unifiedban.Models;
+using Unifiedban.Models.Filters;
 
-namespace Unifiedban.Data
+namespace Unifiedban.Data.Filters
 {
-    public class ButtonService
+    public class BadImageService
     {
-        public Button Add(Button button, int callerId)
+        public BadImage Add(BadImage badImage, int callerId)
         {
             using (UBContext ubc = new UBContext())
             {
                 try
                 {
-                    ubc.Add(button);
+                    ubc.Add(badImage);
                     ubc.SaveChanges();
-                    return button;
+                    return badImage;
                 }
                 catch (Exception ex)
                 {
@@ -30,7 +31,7 @@ namespace Unifiedban.Data
                     {
                         LoggerName = "Unifiedban",
                         Date = DateTime.Now,
-                        Function = "Unifiedban.Data.ButtonService.Add",
+                        Function = "Unifiedban.Data.BadImageService.Add",
                         Level = SystemLog.Levels.Warn,
                         Message = ex.Message,
                         UserId = callerId
@@ -40,7 +41,7 @@ namespace Unifiedban.Data
                         {
                             LoggerName = "Unifiedban.Data",
                             Date = DateTime.Now,
-                            Function = "Unifiedban.Data.ButtonService.Add",
+                            Function = "Unifiedban.Data.BadImageService.Add",
                             Level = SystemLog.Levels.Warn,
                             Message = ex.InnerException.Message,
                             UserId = callerId
@@ -49,25 +50,27 @@ namespace Unifiedban.Data
                 return null;
             }
         }
-        public Button Update(Button button, int callerId)
+        public BadImage Update(BadImage badImage, int callerId)
         {
             using (UBContext ubc = new UBContext())
             {
-                Button exists = ubc.Buttons
-                    .Where(x => x.ButtonId == button.ButtonId)
+                BadImage exists = ubc.BadImages
+                    .Where(x => x.BadImageId == badImage.BadImageId)
                     .FirstOrDefault();
                 if (exists == null)
                     return null;
 
                 try
                 {
-                    exists.Name = button.Name;
-                    exists.Content = button.Content;
-                    exists.Scope = button.Scope;
-                    exists.GroupId = button.GroupId;
+                    exists.GroupId = badImage.GroupId;
+                    exists.HashData = badImage.HashData;
+                    exists.ParentImageId = badImage.ParentImageId;
+                    exists.FlipType = badImage.FlipType;
+                    exists.Status = badImage.Status;
+                    exists.Match = badImage.Match;
 
                     ubc.SaveChanges();
-                    return button;
+                    return badImage;
                 }
                 catch (Exception ex)
                 {
@@ -75,7 +78,7 @@ namespace Unifiedban.Data
                     {
                         LoggerName = "Unifiedban",
                         Date = DateTime.Now,
-                        Function = "Unifiedban.Data.ButtonService.Update",
+                        Function = "Unifiedban.Data.BadImageService.Update",
                         Level = SystemLog.Levels.Warn,
                         Message = ex.Message,
                         UserId = callerId
@@ -85,7 +88,7 @@ namespace Unifiedban.Data
                         {
                             LoggerName = "Unifiedban.Data",
                             Date = DateTime.Now,
-                            Function = "Unifiedban.Data.ButtonService.Update",
+                            Function = "Unifiedban.Data.BadImageService.Update",
                             Level = SystemLog.Levels.Warn,
                             Message = ex.InnerException.Message,
                             UserId = callerId
@@ -94,20 +97,18 @@ namespace Unifiedban.Data
                 return null;
             }
         }
-        public SystemLog.ErrorCodes Remove(Button button, int callerId)
+        public SystemLog.ErrorCodes Remove(BadImage badImage, int callerId)
         {
             using (UBContext ubc = new UBContext())
             {
-                Button exists = ubc.Buttons
-                    .Where(x => x.ButtonId == button.ButtonId ||
-                        (x.GroupId == button.GroupId && x.Name == button.Name))
+                BadImage exists = ubc.BadImages
+                    .Where(x => x.BadImageId == badImage.BadImageId)
                     .FirstOrDefault();
                 if (exists == null)
                     return SystemLog.ErrorCodes.Error;
 
                 try
                 {
-                    ubc.Remove(exists);
                     ubc.SaveChanges();
                     return SystemLog.ErrorCodes.OK;
                 }
@@ -117,7 +118,7 @@ namespace Unifiedban.Data
                     {
                         LoggerName = "Unifiedban",
                         Date = DateTime.Now,
-                        Function = "Unifiedban.Data.ButtonService.Remove",
+                        Function = "Unifiedban.Data.BadImageService.Remove",
                         Level = SystemLog.Levels.Warn,
                         Message = ex.Message,
                         UserId = callerId
@@ -127,7 +128,7 @@ namespace Unifiedban.Data
                         {
                             LoggerName = "Unifiedban.Data",
                             Date = DateTime.Now,
-                            Function = "Unifiedban.Data.ButtonService.Remove",
+                            Function = "Unifiedban.Data.BadImageService.Remove",
                             Level = SystemLog.Levels.Warn,
                             Message = ex.InnerException.Message,
                             UserId = callerId
@@ -136,18 +137,18 @@ namespace Unifiedban.Data
                 return SystemLog.ErrorCodes.Error;
             }
         }
-        public List<Button> Get(Expression<Func<Button, bool>> whereClause)
+        public List<BadImage> Get(Expression<Func<BadImage, bool>> whereClause)
         {
             try
             {
                 using (UBContext ubc = new UBContext())
                 {
                     if (whereClause == null)
-                        return ubc.Buttons
+                        return ubc.BadImages
                             .AsNoTracking()
                             .ToList();
 
-                    return ubc.Buttons
+                    return ubc.BadImages
                         .AsNoTracking()
                         .Where(whereClause)
                         .ToList();
@@ -156,7 +157,7 @@ namespace Unifiedban.Data
             }
             catch
             {
-                return new List<Button>();
+                return new List<BadImage>();
             }
         }
     }

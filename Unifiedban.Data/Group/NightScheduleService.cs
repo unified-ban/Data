@@ -1,4 +1,8 @@
-﻿using System;
+﻿/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/. */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -51,7 +55,7 @@ namespace Unifiedban.Data.Group
             using (UBContext ubc = new UBContext())
             {
                 NightSchedule exists = ubc.Group_NightSchedules
-                    .Where(x => x.NightScheduleId == nightSchedule.NightScheduleId)
+                    .Where(x => x.GroupId == nightSchedule.GroupId)
                     .FirstOrDefault();
                 if (exists == null)
                     return null;
@@ -102,6 +106,7 @@ namespace Unifiedban.Data.Group
 
                 try
                 {
+                    ubc.Remove(exists);
                     ubc.SaveChanges();
                     return SystemLog.ErrorCodes.OK;
                 }
@@ -132,18 +137,25 @@ namespace Unifiedban.Data.Group
         }
         public List<NightSchedule> Get(Expression<Func<NightSchedule, bool>> whereClause)
         {
-            using (UBContext ubc = new UBContext())
+            try
             {
-                if (whereClause == null)
+                using (UBContext ubc = new UBContext())
+                {
+                    if (whereClause == null)
+                        return ubc.Group_NightSchedules
+                            .AsNoTracking()
+                            .ToList();
+
                     return ubc.Group_NightSchedules
                         .AsNoTracking()
+                        .Where(whereClause)
                         .ToList();
 
-                return ubc.Group_NightSchedules
-                    .AsNoTracking()
-                    .Where(whereClause)
-                    .ToList();
-
+                }
+            }
+            catch
+            {
+                return new List<NightSchedule>();
             }
         }
     }
