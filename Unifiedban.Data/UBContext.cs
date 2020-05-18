@@ -30,6 +30,7 @@ namespace Unifiedban.Data
         public DbSet<OperationLog> OperationLogs { get; set; }
         public DbSet<ActionLog> ActionLogs { get; set; }
         public DbSet<SupportSessionLog> SupportSessionLogs { get; set; }
+        public DbSet<TrustFactorLog> TrustFactorLogs { get; set; }
         #endregion
 
         #region " Config "
@@ -52,6 +53,7 @@ namespace Unifiedban.Data
         public DbSet<Banned> Users_Banned { get; set; }
         public DbSet<Flood> Users_Flood { get; set; }
         public DbSet<TempKicked> Users_TempKicked { get; set; }
+        public DbSet<TrustFactor> Users_TrustFactor { get; set; }
         #endregion
 
         #region " Group "

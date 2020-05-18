@@ -450,6 +450,28 @@ namespace Unifiedban.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Unifiedban.Models.TrustFactorLog", b =>
+                {
+                    b.Property<string>("TrustFactorLogId")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100);
+
+                    b.Property<int>("Action");
+
+                    b.Property<int>("ActionTakenBy");
+
+                    b.Property<DateTime>("DateTime");
+
+                    b.Property<string>("TrustFactorId")
+                        .HasMaxLength(100);
+
+                    b.HasKey("TrustFactorLogId");
+
+                    b.HasIndex("TrustFactorId");
+
+                    b.ToTable("TrustFactorLog","dbo");
+                });
+
             modelBuilder.Entity("Unifiedban.Models.User.Banned", b =>
                 {
                     b.Property<int>("TelegramUserId")
@@ -493,6 +515,21 @@ namespace Unifiedban.Data.Migrations
                     b.HasIndex("GroupId");
 
                     b.ToTable("User_TempKicked","dbo");
+                });
+
+            modelBuilder.Entity("Unifiedban.Models.User.TrustFactor", b =>
+                {
+                    b.Property<string>("TrustFactorId")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100);
+
+                    b.Property<int>("Points");
+
+                    b.Property<int>("TelegramUserId");
+
+                    b.HasKey("TrustFactorId");
+
+                    b.ToTable("User_TrustFactor","dbo");
                 });
 
             modelBuilder.Entity("Unifiedban.Models.ActionLog", b =>
@@ -585,6 +622,13 @@ namespace Unifiedban.Data.Migrations
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Unifiedban.Models.TrustFactorLog", b =>
+                {
+                    b.HasOne("Unifiedban.Models.User.TrustFactor", "TrustFactor")
+                        .WithMany()
+                        .HasForeignKey("TrustFactorId");
                 });
 
             modelBuilder.Entity("Unifiedban.Models.User.Flood", b =>
