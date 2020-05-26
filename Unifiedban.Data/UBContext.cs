@@ -42,6 +42,7 @@ namespace Unifiedban.Data
         public DbSet<ActionType> ActionTypes { get; set; }
         public DbSet<Button> Buttons { get; set; }
         public DbSet<Operator> Operators { get; set; }
+        public DbSet<DashboardSession> DashboardSessions { get; set; }
 
         #region " Translation / Lang "
         public DbSet<Language> Languages { get; set; }

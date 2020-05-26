@@ -78,6 +78,36 @@ namespace Unifiedban.Data.Migrations
                     b.ToTable("Button","dbo");
                 });
 
+            modelBuilder.Entity("Unifiedban.Models.DashboardSession", b =>
+                {
+                    b.Property<string>("DashboardSessionId")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100);
+
+                    b.Property<string>("DashboardUserId")
+                        .HasMaxLength(200);
+
+                    b.Property<string>("DeviceId");
+
+                    b.Property<DateTime>("StartDateUtc");
+
+                    b.Property<string>("TelegramFirstName");
+
+                    b.Property<string>("TelegramLastName");
+
+                    b.Property<string>("TelegramPhotoUrl");
+
+                    b.Property<int>("TelegramUserId");
+
+                    b.Property<string>("TelegramUsername");
+
+                    b.HasKey("DashboardSessionId");
+
+                    b.HasIndex("DashboardUserId");
+
+                    b.ToTable("DashboardSession","dbo");
+                });
+
             modelBuilder.Entity("Unifiedban.Models.Filters.BadImage", b =>
                 {
                     b.Property<string>("BadImageId")
@@ -548,6 +578,13 @@ namespace Unifiedban.Data.Migrations
                     b.HasOne("Unifiedban.Models.Group.TelegramGroup", "Group")
                         .WithMany()
                         .HasForeignKey("GroupId");
+                });
+
+            modelBuilder.Entity("Unifiedban.Models.DashboardSession", b =>
+                {
+                    b.HasOne("Unifiedban.Models.Group.DashboardUser", "DashboardUser")
+                        .WithMany()
+                        .HasForeignKey("DashboardUserId");
                 });
 
             modelBuilder.Entity("Unifiedban.Models.Filters.BadImage", b =>
