@@ -97,6 +97,7 @@ namespace Unifiedban.Data.User
 
                 try
                 {
+                    ubc.Remove(exists);
                     ubc.SaveChanges();
                     return SystemLog.ErrorCodes.OK;
                 }
