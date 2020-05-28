@@ -85,7 +85,7 @@ namespace Unifiedban.Data.Migrations
                         .HasMaxLength(100);
 
                     b.Property<string>("DashboardUserId")
-                        .HasMaxLength(200);
+                        .HasMaxLength(450);
 
                     b.Property<string>("DeviceId");
 
@@ -499,7 +499,7 @@ namespace Unifiedban.Data.Migrations
 
                     b.HasIndex("TrustFactorId");
 
-                    b.ToTable("TrustFactorLog","dbo");
+                    b.ToTable("TrustFactorLog","log");
                 });
 
             modelBuilder.Entity("Unifiedban.Models.User.Banned", b =>
