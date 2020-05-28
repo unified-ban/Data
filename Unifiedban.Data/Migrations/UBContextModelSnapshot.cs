@@ -78,6 +78,36 @@ namespace Unifiedban.Data.Migrations
                     b.ToTable("Button","dbo");
                 });
 
+            modelBuilder.Entity("Unifiedban.Models.DashboardSession", b =>
+                {
+                    b.Property<string>("DashboardSessionId")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100);
+
+                    b.Property<string>("DashboardUserId")
+                        .HasMaxLength(450);
+
+                    b.Property<string>("DeviceId");
+
+                    b.Property<DateTime>("StartDateUtc");
+
+                    b.Property<string>("TelegramFirstName");
+
+                    b.Property<string>("TelegramLastName");
+
+                    b.Property<string>("TelegramPhotoUrl");
+
+                    b.Property<int>("TelegramUserId");
+
+                    b.Property<string>("TelegramUsername");
+
+                    b.HasKey("DashboardSessionId");
+
+                    b.HasIndex("DashboardUserId");
+
+                    b.ToTable("DashboardSession","dbo");
+                });
+
             modelBuilder.Entity("Unifiedban.Models.Filters.BadImage", b =>
                 {
                     b.Property<string>("BadImageId")
@@ -450,6 +480,28 @@ namespace Unifiedban.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Unifiedban.Models.TrustFactorLog", b =>
+                {
+                    b.Property<string>("TrustFactorLogId")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100);
+
+                    b.Property<int>("Action");
+
+                    b.Property<int>("ActionTakenBy");
+
+                    b.Property<DateTime>("DateTime");
+
+                    b.Property<string>("TrustFactorId")
+                        .HasMaxLength(100);
+
+                    b.HasKey("TrustFactorLogId");
+
+                    b.HasIndex("TrustFactorId");
+
+                    b.ToTable("TrustFactorLog","log");
+                });
+
             modelBuilder.Entity("Unifiedban.Models.User.Banned", b =>
                 {
                     b.Property<int>("TelegramUserId")
@@ -495,6 +547,21 @@ namespace Unifiedban.Data.Migrations
                     b.ToTable("User_TempKicked","dbo");
                 });
 
+            modelBuilder.Entity("Unifiedban.Models.User.TrustFactor", b =>
+                {
+                    b.Property<string>("TrustFactorId")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100);
+
+                    b.Property<int>("Points");
+
+                    b.Property<int>("TelegramUserId");
+
+                    b.HasKey("TrustFactorId");
+
+                    b.ToTable("User_TrustFactor","dbo");
+                });
+
             modelBuilder.Entity("Unifiedban.Models.ActionLog", b =>
                 {
                     b.HasOne("Unifiedban.Models.ActionType", "ActionType")
@@ -511,6 +578,13 @@ namespace Unifiedban.Data.Migrations
                     b.HasOne("Unifiedban.Models.Group.TelegramGroup", "Group")
                         .WithMany()
                         .HasForeignKey("GroupId");
+                });
+
+            modelBuilder.Entity("Unifiedban.Models.DashboardSession", b =>
+                {
+                    b.HasOne("Unifiedban.Models.Group.DashboardUser", "DashboardUser")
+                        .WithMany()
+                        .HasForeignKey("DashboardUserId");
                 });
 
             modelBuilder.Entity("Unifiedban.Models.Filters.BadImage", b =>
@@ -585,6 +659,13 @@ namespace Unifiedban.Data.Migrations
                         .WithMany()
                         .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Unifiedban.Models.TrustFactorLog", b =>
+                {
+                    b.HasOne("Unifiedban.Models.User.TrustFactor", "TrustFactor")
+                        .WithMany()
+                        .HasForeignKey("TrustFactorId");
                 });
 
             modelBuilder.Entity("Unifiedban.Models.User.Flood", b =>

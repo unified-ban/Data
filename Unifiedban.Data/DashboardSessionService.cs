@@ -11,53 +11,46 @@ using Microsoft.EntityFrameworkCore;
 using Unifiedban.Models;
 using Unifiedban.Models.User;
 
-namespace Unifiedban.Data.User
+namespace Unifiedban.Data
 {
-    public class BannedService
+    public class DashboardSessionService
     {
-        public Banned Add(Banned banned, int callerId)
+        public DashboardSession Add(DashboardSession dashboardSession, int callerId)
         {
             using (UBContext ubc = new UBContext())
             {
                 try
                 {
-                    using (var transaction = ubc.Database.BeginTransaction())
+                    try
                     {
-                        try
-                        {
-                            ubc.Add(banned);
-                            ubc.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.User_Banned ON;");
-                            ubc.SaveChanges();
-                            ubc.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.User_Banned OFF");
-                            transaction.Commit();
+                        ubc.Add(dashboardSession);
+                        ubc.SaveChanges();
 
-                            return banned;
-                        }
-                        catch (Exception ex)
+                        return dashboardSession;
+                    }
+                    catch (Exception ex)
+                    {
+                        Utils.Logging.AddLog(new SystemLog()
                         {
+                            LoggerName = "Unifiedban",
+                            Date = DateTime.Now,
+                            Function = "Unifiedban.Data.DashboardSessionService.Add",
+                            Level = SystemLog.Levels.Warn,
+                            Message = ex.Message,
+                            UserId = callerId
+                        });
+                        if (ex.InnerException != null)
                             Utils.Logging.AddLog(new SystemLog()
                             {
-                                LoggerName = "Unifiedban",
+                                LoggerName = "Unifiedban.Data",
                                 Date = DateTime.Now,
-                                Function = "Unifiedban.Data.BannedService.Add",
+                                Function = "Unifiedban.Data.DashboardSessionService.Add",
                                 Level = SystemLog.Levels.Warn,
-                                Message = ex.Message,
+                                Message = ex.InnerException.Message,
                                 UserId = callerId
                             });
-                            if (ex.InnerException != null)
-                                Utils.Logging.AddLog(new SystemLog()
-                                {
-                                    LoggerName = "Unifiedban.Data",
-                                    Date = DateTime.Now,
-                                    Function = "Unifiedban.Data.BannedService.Add",
-                                    Level = SystemLog.Levels.Warn,
-                                    Message = ex.InnerException.Message,
-                                    UserId = callerId
-                                });
 
-                            return null;
-                        }
-
+                        return null;
                     }
                 }
                 catch (Exception ex)
@@ -66,7 +59,7 @@ namespace Unifiedban.Data.User
                     {
                         LoggerName = "Unifiedban",
                         Date = DateTime.Now,
-                        Function = "Unifiedban.Data.BannedService.Add",
+                        Function = "Unifiedban.Data.DashboardSessionService.Add",
                         Level = SystemLog.Levels.Warn,
                         Message = ex.Message,
                         UserId = callerId
@@ -76,7 +69,7 @@ namespace Unifiedban.Data.User
                         {
                             LoggerName = "Unifiedban.Data",
                             Date = DateTime.Now,
-                            Function = "Unifiedban.Data.BannedService.Add",
+                            Function = "Unifiedban.Data.DashboardSessionService.Add",
                             Level = SystemLog.Levels.Warn,
                             Message = ex.InnerException.Message,
                             UserId = callerId
@@ -85,12 +78,14 @@ namespace Unifiedban.Data.User
                 return null;
             }
         }
-        public SystemLog.ErrorCodes Remove(Banned banned, int callerId)
+        public SystemLog.ErrorCodes Remove(DashboardSession dashboardSession, int callerId)
         {
             using (UBContext ubc = new UBContext())
             {
-                Banned exists = ubc.Users_Banned
-                    .Where(x => x.TelegramUserId == banned.TelegramUserId)
+                DashboardSession exists = ubc.DashboardSessions
+                    .Where(x => x.DashboardSessionId == dashboardSession.DashboardSessionId
+                        && x.DashboardUserId == dashboardSession.DashboardUserId
+                        && x.DeviceId == dashboardSession.DeviceId)
                     .FirstOrDefault();
                 if (exists == null)
                     return SystemLog.ErrorCodes.Error;
@@ -107,7 +102,7 @@ namespace Unifiedban.Data.User
                     {
                         LoggerName = "Unifiedban",
                         Date = DateTime.Now,
-                        Function = "Unifiedban.Data.BannedService.Remove",
+                        Function = "Unifiedban.Data.DashboardSessionService.Remove",
                         Level = SystemLog.Levels.Warn,
                         Message = ex.Message,
                         UserId = callerId
@@ -117,7 +112,7 @@ namespace Unifiedban.Data.User
                         {
                             LoggerName = "Unifiedban.Data",
                             Date = DateTime.Now,
-                            Function = "Unifiedban.Data.BannedService.Remove",
+                            Function = "Unifiedban.Data.DashboardSessionService.Remove",
                             Level = SystemLog.Levels.Warn,
                             Message = ex.InnerException.Message,
                             UserId = callerId
@@ -126,18 +121,18 @@ namespace Unifiedban.Data.User
                 return SystemLog.ErrorCodes.Error;
             }
         }
-        public List<Banned> Get(Expression<Func<Banned, bool>> whereClause)
+        public List<DashboardSession> Get(Expression<Func<DashboardSession, bool>> whereClause)
         {
             try
             {
                 using (UBContext ubc = new UBContext())
                 {
                     if (whereClause == null)
-                        return ubc.Users_Banned
+                        return ubc.DashboardSessions
                             .AsNoTracking()
                             .ToList();
 
-                    return ubc.Users_Banned
+                    return ubc.DashboardSessions
                         .AsNoTracking()
                         .Where(whereClause)
                         .ToList();
@@ -146,7 +141,7 @@ namespace Unifiedban.Data.User
             }
             catch
             {
-                return new List<Banned>();
+                return new List<DashboardSession>();
             }
         }
     }

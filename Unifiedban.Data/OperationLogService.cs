@@ -48,6 +48,40 @@ namespace Unifiedban.Data
                 }
                 return null;
             }
+        }public List<OperationLog> Add(List<OperationLog> operationLog, int callerId)
+        {
+            using (UBContext ubc = new UBContext())
+            {
+                try
+                {
+                    ubc.Add(operationLog);
+                    ubc.SaveChanges();
+                    return operationLog;
+                }
+                catch (Exception ex)
+                {
+                    Utils.Logging.AddLog(new SystemLog()
+                    {
+                        LoggerName = "Unifiedban",
+                        Date = DateTime.Now,
+                        Function = "Unifiedban.Data.OperationLogService.Add",
+                        Level = SystemLog.Levels.Warn,
+                        Message = ex.Message,
+                        UserId = callerId
+                    });
+                    if (ex.InnerException != null)
+                        Utils.Logging.AddLog(new SystemLog()
+                        {
+                            LoggerName = "Unifiedban.Data",
+                            Date = DateTime.Now,
+                            Function = "Unifiedban.Data.OperationLogService.Add",
+                            Level = SystemLog.Levels.Warn,
+                            Message = ex.InnerException.Message,
+                            UserId = callerId
+                        });
+                }
+                return null;
+            }
         }
 
         public List<OperationLog> Get(Expression<Func<OperationLog, bool>> whereClause)

@@ -11,54 +11,19 @@ using Microsoft.EntityFrameworkCore;
 using Unifiedban.Models;
 using Unifiedban.Models.User;
 
-namespace Unifiedban.Data.User
+namespace Unifiedban.Data
 {
-    public class BannedService
+    public class TrustFactorLogService
     {
-        public Banned Add(Banned banned, int callerId)
+        public TrustFactorLog Add(TrustFactorLog trustFactorLog, int callerId)
         {
             using (UBContext ubc = new UBContext())
             {
                 try
                 {
-                    using (var transaction = ubc.Database.BeginTransaction())
-                    {
-                        try
-                        {
-                            ubc.Add(banned);
-                            ubc.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.User_Banned ON;");
-                            ubc.SaveChanges();
-                            ubc.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.User_Banned OFF");
-                            transaction.Commit();
-
-                            return banned;
-                        }
-                        catch (Exception ex)
-                        {
-                            Utils.Logging.AddLog(new SystemLog()
-                            {
-                                LoggerName = "Unifiedban",
-                                Date = DateTime.Now,
-                                Function = "Unifiedban.Data.BannedService.Add",
-                                Level = SystemLog.Levels.Warn,
-                                Message = ex.Message,
-                                UserId = callerId
-                            });
-                            if (ex.InnerException != null)
-                                Utils.Logging.AddLog(new SystemLog()
-                                {
-                                    LoggerName = "Unifiedban.Data",
-                                    Date = DateTime.Now,
-                                    Function = "Unifiedban.Data.BannedService.Add",
-                                    Level = SystemLog.Levels.Warn,
-                                    Message = ex.InnerException.Message,
-                                    UserId = callerId
-                                });
-
-                            return null;
-                        }
-
-                    }
+                    ubc.Add(trustFactorLog);
+                    ubc.SaveChanges();
+                    return trustFactorLog;
                 }
                 catch (Exception ex)
                 {
@@ -66,7 +31,7 @@ namespace Unifiedban.Data.User
                     {
                         LoggerName = "Unifiedban",
                         Date = DateTime.Now,
-                        Function = "Unifiedban.Data.BannedService.Add",
+                        Function = "Unifiedban.Data.TrustFactorLogService.Add",
                         Level = SystemLog.Levels.Warn,
                         Message = ex.Message,
                         UserId = callerId
@@ -76,7 +41,7 @@ namespace Unifiedban.Data.User
                         {
                             LoggerName = "Unifiedban.Data",
                             Date = DateTime.Now,
-                            Function = "Unifiedban.Data.BannedService.Add",
+                            Function = "Unifiedban.Data.TrustFactorLogService.Add",
                             Level = SystemLog.Levels.Warn,
                             Message = ex.InnerException.Message,
                             UserId = callerId
@@ -85,21 +50,15 @@ namespace Unifiedban.Data.User
                 return null;
             }
         }
-        public SystemLog.ErrorCodes Remove(Banned banned, int callerId)
+        public List<TrustFactorLog> Add(List<TrustFactorLog> trustFactorLog, int callerId)
         {
             using (UBContext ubc = new UBContext())
             {
-                Banned exists = ubc.Users_Banned
-                    .Where(x => x.TelegramUserId == banned.TelegramUserId)
-                    .FirstOrDefault();
-                if (exists == null)
-                    return SystemLog.ErrorCodes.Error;
-
                 try
                 {
-                    ubc.Remove(exists);
+                    ubc.Add(trustFactorLog);
                     ubc.SaveChanges();
-                    return SystemLog.ErrorCodes.OK;
+                    return trustFactorLog;
                 }
                 catch (Exception ex)
                 {
@@ -107,7 +66,7 @@ namespace Unifiedban.Data.User
                     {
                         LoggerName = "Unifiedban",
                         Date = DateTime.Now,
-                        Function = "Unifiedban.Data.BannedService.Remove",
+                        Function = "Unifiedban.Data.TrustFactorLogService.Add",
                         Level = SystemLog.Levels.Warn,
                         Message = ex.Message,
                         UserId = callerId
@@ -117,27 +76,27 @@ namespace Unifiedban.Data.User
                         {
                             LoggerName = "Unifiedban.Data",
                             Date = DateTime.Now,
-                            Function = "Unifiedban.Data.BannedService.Remove",
+                            Function = "Unifiedban.Data.TrustFactorLogService.Add",
                             Level = SystemLog.Levels.Warn,
                             Message = ex.InnerException.Message,
                             UserId = callerId
                         });
                 }
-                return SystemLog.ErrorCodes.Error;
+                return null;
             }
         }
-        public List<Banned> Get(Expression<Func<Banned, bool>> whereClause)
+        public List<TrustFactorLog> Get(Expression<Func<TrustFactorLog, bool>> whereClause)
         {
             try
             {
                 using (UBContext ubc = new UBContext())
                 {
                     if (whereClause == null)
-                        return ubc.Users_Banned
+                        return ubc.TrustFactorLogs
                             .AsNoTracking()
                             .ToList();
 
-                    return ubc.Users_Banned
+                    return ubc.TrustFactorLogs
                         .AsNoTracking()
                         .Where(whereClause)
                         .ToList();
@@ -146,7 +105,7 @@ namespace Unifiedban.Data.User
             }
             catch
             {
-                return new List<Banned>();
+                return new List<TrustFactorLog>();
             }
         }
     }
