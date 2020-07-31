@@ -54,7 +54,7 @@ namespace Unifiedban.Data
             {
                 try
                 {
-                    ubc.Add(operationLog);
+                    ubc.AddRange(operationLog);
                     ubc.SaveChanges();
                     return operationLog;
                 }

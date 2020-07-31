@@ -56,7 +56,10 @@ namespace Unifiedban.Data
             {
                 try
                 {
-                    ubc.Add(actionLog);
+                    foreach (var log in actionLog)
+                    {
+                        ubc.Add(log);
+                    }
                     ubc.SaveChanges();
                     return actionLog;
                 }
