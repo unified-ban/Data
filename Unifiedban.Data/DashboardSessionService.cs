@@ -15,43 +15,22 @@ namespace Unifiedban.Data
 {
     public class DashboardSessionService
     {
-        public DashboardSession Add(DashboardSession dashboardSession, int callerId)
+        /// <summary>
+        /// Creates a new DashboardSession
+        /// </summary>
+        /// <param name="dashboardSession"></param>
+        /// <param name="callerId"></param>
+        /// <returns>DashboardSession or Response</returns>
+        public object Add(DashboardSession dashboardSession, int callerId)
         {
             using (UBContext ubc = new UBContext())
             {
                 try
                 {
-                    try
-                    {
-                        ubc.Add(dashboardSession);
-                        ubc.SaveChanges();
+                    ubc.Add(dashboardSession);
+                    ubc.SaveChanges();
 
-                        return dashboardSession;
-                    }
-                    catch (Exception ex)
-                    {
-                        Utils.Logging.AddLog(new SystemLog()
-                        {
-                            LoggerName = "Unifiedban",
-                            Date = DateTime.Now,
-                            Function = "Unifiedban.Data.DashboardSessionService.Add",
-                            Level = SystemLog.Levels.Warn,
-                            Message = ex.Message,
-                            UserId = callerId
-                        });
-                        if (ex.InnerException != null)
-                            Utils.Logging.AddLog(new SystemLog()
-                            {
-                                LoggerName = "Unifiedban.Data",
-                                Date = DateTime.Now,
-                                Function = "Unifiedban.Data.DashboardSessionService.Add",
-                                Level = SystemLog.Levels.Warn,
-                                Message = ex.InnerException.Message,
-                                UserId = callerId
-                            });
-
-                        return null;
-                    }
+                    return dashboardSession;
                 }
                 catch (Exception ex)
                 {
@@ -65,6 +44,7 @@ namespace Unifiedban.Data
                         UserId = callerId
                     });
                     if (ex.InnerException != null)
+                    {
                         Utils.Logging.AddLog(new SystemLog()
                         {
                             LoggerName = "Unifiedban.Data",
@@ -74,8 +54,14 @@ namespace Unifiedban.Data
                             Message = ex.InnerException.Message,
                             UserId = callerId
                         });
+                    }
                 }
-                return null;
+
+                return new Response()
+                {
+                    StatusCode = 4006,
+                    StatusDescription = "Error creating DashboardSession on database."
+                };
             }
         }
         public SystemLog.ErrorCodes Remove(DashboardSession dashboardSession, int callerId)
