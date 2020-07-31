@@ -149,5 +149,31 @@ namespace Unifiedban.Data.User
                 return new List<Banned>();
             }
         }
+        
+        public List<Banned> GetLimit(Expression<Func<Banned, bool>> whereClause, int limit)
+        {
+            try
+            {
+                using (UBContext ubc = new UBContext())
+                {
+                    if (whereClause == null)
+                        return ubc.Users_Banned
+                            .AsNoTracking()
+                            .OrderByDescending(x => x.UtcDate).Skip(0).Take(limit)
+                            .ToList();
+
+                    return ubc.Users_Banned
+                        .AsNoTracking()
+                        .Where(whereClause)
+                        .OrderByDescending(x => x.UtcDate).Skip(0).Take(limit)
+                        .ToList();
+
+                }
+            }
+            catch
+            {
+                return new List<Banned>();
+            }
+        }
     }
 }

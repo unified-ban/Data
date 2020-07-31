@@ -56,7 +56,10 @@ namespace Unifiedban.Data
             {
                 try
                 {
-                    ubc.Add(trustFactorLog);
+                    foreach (var log in trustFactorLog)
+                    {
+                        ubc.Add(log);
+                    }
                     ubc.SaveChanges();
                     return trustFactorLog;
                 }
