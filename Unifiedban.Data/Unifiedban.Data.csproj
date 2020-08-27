@@ -12,6 +12,11 @@
     <FileVersion>1.0.0.80</FileVersion>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Migrations\20190925045912_Unifiedban-MakeTelegramChatIdLong.cs" />
     <Compile Remove="Migrations\20190925045912_Unifiedban-MakeTelegramChatIdLong.Designer.cs" />
