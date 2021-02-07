@@ -15,22 +15,27 @@ namespace Unifiedban.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("ProductVersion", "3.1.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("Unifiedban.Models.ActionLog", b =>
                 {
                     b.Property<string>("ActionLogId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ActionTypeId");
+                    b.Property<string>("ActionTypeId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("GroupId");
+                    b.Property<string>("GroupId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Parameters");
+                    b.Property<string>("Parameters")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UtcDate");
+                    b.Property<DateTime>("UtcDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("ActionLogId");
 
@@ -44,9 +49,11 @@ namespace Unifiedban.Data.Migrations
             modelBuilder.Entity("Unifiedban.Models.ActionType", b =>
                 {
                     b.Property<string>("ActionTypeId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ActionTypeId");
 
@@ -56,16 +63,21 @@ namespace Unifiedban.Data.Migrations
             modelBuilder.Entity("Unifiedban.Models.Button", b =>
                 {
                     b.Property<string>("ButtonId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Content");
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("GroupId");
+                    b.Property<string>("GroupId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<int>("Scope");
+                    b.Property<int>("Scope")
+                        .HasColumnType("int");
 
                     b.HasKey("ButtonId");
 
@@ -81,25 +93,33 @@ namespace Unifiedban.Data.Migrations
             modelBuilder.Entity("Unifiedban.Models.DashboardSession", b =>
                 {
                     b.Property<string>("DashboardSessionId")
-                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.Property<string>("DashboardUserId")
+                        .HasColumnType("nvarchar(450)")
                         .HasMaxLength(450);
 
-                    b.Property<string>("DeviceId");
+                    b.Property<string>("DeviceId")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("StartDateUtc");
+                    b.Property<DateTime>("StartDateUtc")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("TelegramFirstName");
+                    b.Property<string>("TelegramFirstName")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TelegramLastName");
+                    b.Property<string>("TelegramLastName")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TelegramPhotoUrl");
+                    b.Property<string>("TelegramPhotoUrl")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TelegramUserId");
+                    b.Property<int>("TelegramUserId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("TelegramUsername");
+                    b.Property<string>("TelegramUsername")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("DashboardSessionId");
 
@@ -111,22 +131,30 @@ namespace Unifiedban.Data.Migrations
             modelBuilder.Entity("Unifiedban.Models.Filters.BadImage", b =>
                 {
                     b.Property<string>("BadImageId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("FlipType");
+                    b.Property<int>("FlipType")
+                        .HasColumnType("int");
 
-                    b.Property<string>("GroupId");
+                    b.Property<string>("GroupId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("HashData");
+                    b.Property<string>("HashData")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Match");
+                    b.Property<int>("Match")
+                        .HasColumnType("int");
 
                     b.Property<string>("ParentImageId")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("UtcDate");
+                    b.Property<DateTime>("UtcDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("BadImageId");
 
@@ -138,20 +166,27 @@ namespace Unifiedban.Data.Migrations
             modelBuilder.Entity("Unifiedban.Models.Filters.BadWord", b =>
                 {
                     b.Property<string>("BadWordId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("GroupId");
+                    b.Property<string>("GroupId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Match");
+                    b.Property<int>("Match")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<string>("Regex");
+                    b.Property<string>("Regex")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("UtcDate");
+                    b.Property<DateTime>("UtcDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("BadWordId");
 
@@ -165,11 +200,14 @@ namespace Unifiedban.Data.Migrations
             modelBuilder.Entity("Unifiedban.Models.Filters.SafeTName", b =>
                 {
                     b.Property<string>("Username")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<long>("TelegramChatId");
+                    b.Property<long>("TelegramChatId")
+                        .HasColumnType("bigint");
 
-                    b.Property<DateTime>("RecordDate");
+                    b.Property<DateTime>("RecordDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Username", "TelegramChatId");
 
@@ -181,13 +219,16 @@ namespace Unifiedban.Data.Migrations
             modelBuilder.Entity("Unifiedban.Models.Group.ConfigurationParameter", b =>
                 {
                     b.Property<string>("ConfigurationParameterId")
-                        .ValueGeneratedOnAdd();
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Type");
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Value");
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Values");
+                    b.Property<string>("Values")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ConfigurationParameterId");
 
@@ -197,15 +238,20 @@ namespace Unifiedban.Data.Migrations
             modelBuilder.Entity("Unifiedban.Models.Group.DashboardPermission", b =>
                 {
                     b.Property<string>("DashboardPermissionId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("DashboardUserId");
+                    b.Property<string>("DashboardUserId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("GroupId");
+                    b.Property<string>("GroupId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("LastUpdateUtc");
+                    b.Property<DateTime>("LastUpdateUtc")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("State");
+                    b.Property<int>("State")
+                        .HasColumnType("int");
 
                     b.HasKey("DashboardPermissionId");
 
@@ -221,15 +267,20 @@ namespace Unifiedban.Data.Migrations
             modelBuilder.Entity("Unifiedban.Models.Group.DashboardUser", b =>
                 {
                     b.Property<string>("DashboardUserId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("LastActionUtc");
+                    b.Property<DateTime>("LastActionUtc")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProfilePicture");
+                    b.Property<string>("ProfilePicture")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TelegramUserId");
+                    b.Property<int>("TelegramUserId")
+                        .HasColumnType("int");
 
                     b.HasKey("DashboardUserId");
 
@@ -241,15 +292,20 @@ namespace Unifiedban.Data.Migrations
             modelBuilder.Entity("Unifiedban.Models.Group.NightSchedule", b =>
                 {
                     b.Property<string>("NightScheduleId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("GroupId");
+                    b.Property<string>("GroupId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("State");
+                    b.Property<int>("State")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime?>("UtcEndDate");
+                    b.Property<DateTime?>("UtcEndDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("UtcStartDate");
+                    b.Property<DateTime?>("UtcStartDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("NightScheduleId");
 
@@ -261,13 +317,17 @@ namespace Unifiedban.Data.Migrations
             modelBuilder.Entity("Unifiedban.Models.Group.Note", b =>
                 {
                     b.Property<string>("NoteId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("GroupId");
+                    b.Property<string>("GroupId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Message");
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Tag");
+                    b.Property<string>("Tag")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("NoteId");
 
@@ -282,9 +342,11 @@ namespace Unifiedban.Data.Migrations
 
             modelBuilder.Entity("Unifiedban.Models.Group.SafeGroup", b =>
                 {
-                    b.Property<string>("GroupId");
+                    b.Property<string>("GroupId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("GroupName");
+                    b.Property<string>("GroupName")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("GroupId", "GroupName");
 
@@ -294,25 +356,43 @@ namespace Unifiedban.Data.Migrations
             modelBuilder.Entity("Unifiedban.Models.Group.TelegramGroup", b =>
                 {
                     b.Property<string>("GroupId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ChatLanguage");
+                    b.Property<string>("ChatLanguage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Configuration");
+                    b.Property<string>("Configuration")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("ReportChatId");
+                    b.Property<string>("InviteAlias")
+                        .HasColumnType("nvarchar(20)")
+                        .HasMaxLength(20);
 
-                    b.Property<string>("RulesText");
+                    b.Property<string>("InviteLink")
+                        .HasColumnType("nvarchar(150)")
+                        .HasMaxLength(150);
 
-                    b.Property<string>("SettingsLanguage");
+                    b.Property<long>("ReportChatId")
+                        .HasColumnType("bigint");
 
-                    b.Property<int>("State");
+                    b.Property<string>("RulesText")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("TelegramChatId");
+                    b.Property<string>("SettingsLanguage")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Title");
+                    b.Property<int>("State")
+                        .HasColumnType("int");
 
-                    b.Property<string>("WelcomeText");
+                    b.Property<long>("TelegramChatId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WelcomeText")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("GroupId");
 
@@ -324,19 +404,25 @@ namespace Unifiedban.Data.Migrations
             modelBuilder.Entity("Unifiedban.Models.OperationLog", b =>
                 {
                     b.Property<string>("OperationLogId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Action")
+                        .HasColumnType("nvarchar(200)")
                         .HasMaxLength(200);
 
-                    b.Property<string>("GroupId");
+                    b.Property<string>("GroupId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Parameters")
+                        .HasColumnType("nvarchar(400)")
                         .HasMaxLength(400);
 
-                    b.Property<int>("TelegramUserId");
+                    b.Property<int>("TelegramUserId")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("UtcDate");
+                    b.Property<DateTime>("UtcDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("OperationLogId");
 
@@ -348,11 +434,14 @@ namespace Unifiedban.Data.Migrations
             modelBuilder.Entity("Unifiedban.Models.Operator", b =>
                 {
                     b.Property<string>("OperatorId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Level");
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
 
-                    b.Property<int>("TelegramUserId");
+                    b.Property<int>("TelegramUserId")
+                        .HasColumnType("int");
 
                     b.HasKey("OperatorId");
 
@@ -364,17 +453,23 @@ namespace Unifiedban.Data.Migrations
             modelBuilder.Entity("Unifiedban.Models.SupportSessionLog", b =>
                 {
                     b.Property<string>("LogId")
-                        .ValueGeneratedOnAdd();
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("GroupId");
+                    b.Property<string>("GroupId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("SenderId");
+                    b.Property<int>("SenderId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Text");
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Timestamp");
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("Type");
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.HasKey("LogId");
 
@@ -386,10 +481,11 @@ namespace Unifiedban.Data.Migrations
             modelBuilder.Entity("Unifiedban.Models.SysConfig", b =>
                 {
                     b.Property<string>("SysConfigId")
-                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(50)")
                         .HasMaxLength(50);
 
-                    b.Property<string>("Value");
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SysConfigId");
 
@@ -400,19 +496,26 @@ namespace Unifiedban.Data.Migrations
                 {
                     b.Property<int>("SystemLogId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("Date");
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("Function");
+                    b.Property<string>("Function")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Level");
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
 
-                    b.Property<string>("LoggerName");
+                    b.Property<string>("LoggerName")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Message");
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("SystemLogId");
 
@@ -421,11 +524,14 @@ namespace Unifiedban.Data.Migrations
 
             modelBuilder.Entity("Unifiedban.Models.Translation.Entry", b =>
                 {
-                    b.Property<string>("LanguageId");
+                    b.Property<string>("LanguageId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("KeyId");
+                    b.Property<string>("KeyId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Translation");
+                    b.Property<string>("Translation")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("LanguageId", "KeyId");
 
@@ -437,7 +543,7 @@ namespace Unifiedban.Data.Migrations
             modelBuilder.Entity("Unifiedban.Models.Translation.Key", b =>
                 {
                     b.Property<string>("KeyId")
-                        .ValueGeneratedOnAdd();
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("KeyId");
 
@@ -447,16 +553,19 @@ namespace Unifiedban.Data.Migrations
             modelBuilder.Entity("Unifiedban.Models.Translation.Language", b =>
                 {
                     b.Property<string>("LanguageId")
-                        .ValueGeneratedOnAdd();
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<int>("Status");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("UniversalCode")
                         .IsRequired()
+                        .HasColumnType("nvarchar(20)")
                         .HasMaxLength(20);
 
                     b.HasKey("LanguageId");
@@ -484,15 +593,20 @@ namespace Unifiedban.Data.Migrations
                 {
                     b.Property<string>("TrustFactorLogId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<int>("Action");
+                    b.Property<int>("Action")
+                        .HasColumnType("int");
 
-                    b.Property<int>("ActionTakenBy");
+                    b.Property<int>("ActionTakenBy")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("DateTime");
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("TrustFactorId")
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
                     b.HasKey("TrustFactorLogId");
@@ -506,11 +620,14 @@ namespace Unifiedban.Data.Migrations
                 {
                     b.Property<int>("TelegramUserId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Reason");
+                    b.Property<int>("Reason")
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("UtcDate");
+                    b.Property<DateTime>("UtcDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("TelegramUserId");
 
@@ -519,11 +636,14 @@ namespace Unifiedban.Data.Migrations
 
             modelBuilder.Entity("Unifiedban.Models.User.Flood", b =>
                 {
-                    b.Property<int>("TelegramUserId");
+                    b.Property<int>("TelegramUserId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("GroupId");
+                    b.Property<string>("GroupId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("UtcDate");
+                    b.Property<DateTime>("UtcDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("TelegramUserId", "GroupId");
 
@@ -534,11 +654,14 @@ namespace Unifiedban.Data.Migrations
 
             modelBuilder.Entity("Unifiedban.Models.User.TempKicked", b =>
                 {
-                    b.Property<int>("TelegramUserId");
+                    b.Property<int>("TelegramUserId")
+                        .HasColumnType("int");
 
-                    b.Property<string>("GroupId");
+                    b.Property<string>("GroupId")
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<DateTime>("UtcDate");
+                    b.Property<DateTime>("UtcDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("TelegramUserId", "GroupId");
 
@@ -551,11 +674,14 @@ namespace Unifiedban.Data.Migrations
                 {
                     b.Property<string>("TrustFactorId")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(100)")
                         .HasMaxLength(100);
 
-                    b.Property<int>("Points");
+                    b.Property<int>("Points")
+                        .HasColumnType("int");
 
-                    b.Property<int>("TelegramUserId");
+                    b.Property<int>("TelegramUserId")
+                        .HasColumnType("int");
 
                     b.HasKey("TrustFactorId");
 
@@ -631,7 +757,8 @@ namespace Unifiedban.Data.Migrations
                     b.HasOne("Unifiedban.Models.Group.TelegramGroup", "Group")
                         .WithMany()
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Unifiedban.Models.OperationLog", b =>
@@ -653,12 +780,14 @@ namespace Unifiedban.Data.Migrations
                     b.HasOne("Unifiedban.Models.Translation.Key", "Key")
                         .WithMany()
                         .HasForeignKey("KeyId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Unifiedban.Models.Translation.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Unifiedban.Models.TrustFactorLog", b =>
@@ -673,7 +802,8 @@ namespace Unifiedban.Data.Migrations
                     b.HasOne("Unifiedban.Models.Group.TelegramGroup", "Group")
                         .WithMany()
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Unifiedban.Models.User.TempKicked", b =>
@@ -681,7 +811,8 @@ namespace Unifiedban.Data.Migrations
                     b.HasOne("Unifiedban.Models.Group.TelegramGroup", "Group")
                         .WithMany()
                         .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

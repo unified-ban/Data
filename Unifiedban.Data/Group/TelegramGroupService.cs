@@ -71,6 +71,8 @@ namespace Unifiedban.Data.Group
                     exists.SettingsLanguage = telegramGroup.SettingsLanguage;
                     exists.ReportChatId = telegramGroup.ReportChatId;
                     exists.RulesText = telegramGroup.RulesText;
+                    exists.InviteAlias = telegramGroup.InviteAlias;
+                    exists.InviteLink = telegramGroup.InviteLink;
 
                     ubc.SaveChanges();
                     return telegramGroup;
