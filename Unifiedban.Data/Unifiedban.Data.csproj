@@ -8,8 +8,9 @@
     <Copyright>LinuxHub 2020</Copyright>
     <RepositoryUrl>https://todo/</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
-    <AssemblyVersion>1.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.81</FileVersion>
+    <AssemblyVersion>1.0.3</AssemblyVersion>
+    <FileVersion>1.0.3.80</FileVersion>
+    <LangVersion>9</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -42,7 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\models\Unifiedban.Models\Unifiedban.Models.csproj" />
+    <ProjectReference Include="..\..\Models\Unifiedban.Models\Unifiedban.Models.csproj" />
   </ItemGroup>
 
 </Project>
