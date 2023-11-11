@@ -26,9 +26,9 @@ namespace Unifiedban.Data.User
                         try
                         {
                             ubc.Add(banned);
-                            ubc.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.User_Banned ON;");
+                            ubc.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.User_Banned ON;");
                             ubc.SaveChanges();
-                            ubc.Database.ExecuteSqlCommand("SET IDENTITY_INSERT dbo.User_Banned OFF");
+                            ubc.Database.ExecuteSqlRaw("SET IDENTITY_INSERT dbo.User_Banned OFF");
                             transaction.Commit();
 
                             return banned;
